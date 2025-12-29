@@ -1,5 +1,6 @@
 ﻿using HospitalManagementSystem.Application.DTO;
 using HospitalManagementSystem.Application.Interfaces;
+using HospitalManagementSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,29 +9,49 @@ namespace HospitalManagementSystem.Application.Services
 {
     public class HospitalService : IHospitalService
     {
-        public Task<HospitalDTO> Create(HospitalDTO hospitalDTO)
+        private readonly IHospitalRepository _repo;
+        public HospitalService(IHospitalRepository repo)
         {
-            throw new NotImplementedException();
+            _repo = repo;
         }
 
-        public Task<HospitalDTO> Delete(int id)
+        public async Task<List<HospitalDTO>> GetAll()
         {
-            throw new NotImplementedException();
+            return (await _repo.GetAll()).Select(h => new HospitalDTO
+            {
+                Name = h.Name,
+                Location = h.Location
+            }).ToList();
         }
 
-        public Task<List<HospitalDTO>> GetAll()
+        public async Task<HospitalDTO> GetById(int id)
+        {   
+            var h = await _repo.GetById(id);
+            if (h is null)
+                throw new Exception("Invalid Id");
+            return new HospitalDTO
+            {
+                Name = h.Name,
+                Location = h.Location
+            };
+        }
+        public async Task Create(HospitalDTO hospitalDTO)
         {
-            throw new NotImplementedException();
+            await _repo.Create(new Hospital
+            {
+                Name = hospitalDTO.Name,
+                Location = hospitalDTO.Location
+            });
         }
 
-        public Task<HospitalDTO> GetById(int id)
+        public async Task Update(int id, HospitalDTO hospitalDTO)
         {
-            throw new NotImplementedException();
+            await _repo.Update(await _repo.GetById(id));
         }
-
-        public Task<HospitalDTO> Update(HospitalDTO hospitalDTO)
+        
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
-        }
+            await _repo.Delete(id);
+        }   
     }
 }

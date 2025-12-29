@@ -35,9 +35,9 @@ namespace HospitalManagementSystem.API.Controllers
 
 
         [HttpPut("/{id}")]
-        public async Task<IActionResult> Update(HospitalDTO hospitalDTO)
+        public async Task<IActionResult> Update(int id, HospitalDTO hospitalDTO)
         {
-            await _service.Update(hospitalDTO);
+            await _service.Update(id, hospitalDTO);
             return Ok();
         }
 

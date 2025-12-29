@@ -9,8 +9,8 @@ namespace HospitalManagementSystem.Application.Interfaces
     {
         Task<List<HospitalDTO>> GetAll();
         Task<HospitalDTO> GetById(int id);
-        Task<HospitalDTO> Create(HospitalDTO hospitalDTO);
-        Task<HospitalDTO> Update(HospitalDTO hospitalDTO);  
-        Task<HospitalDTO> Delete(int id);
+        Task Create(HospitalDTO hospitalDTO);
+        Task Update(int id, HospitalDTO hospitalDTO);  
+        Task Delete(int id);
     }
 }

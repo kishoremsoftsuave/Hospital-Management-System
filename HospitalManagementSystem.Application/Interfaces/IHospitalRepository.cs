@@ -1,4 +1,4 @@
-﻿using HospitalManagementSystem.Application.DTO;
+﻿using HospitalManagementSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,10 +7,10 @@ namespace HospitalManagementSystem.Application.Interfaces
 {
     public interface IHospitalRepository
     {
-        Task<List<HospitalDTO>> GetAll();
-        Task<HospitalDTO> GetById(int id);
-        Task<HospitalDTO> Create(HospitalDTO hospitalDTO);
-        Task<HospitalDTO> Update(HospitalDTO hospitalDTO);
-        Task<HospitalDTO> Delete(int id);
+        Task<List<Hospital>> GetAll();
+        Task<Hospital> GetById(int id);
+        Task Create(Hospital hospital);
+        Task Update(Hospital hospital);
+        Task Delete(int id);
     }
 }
