@@ -1,0 +1,14 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace HospitalManagementSystem.Infrastructure.Data
+{
+    public class HospitalDB : DbContext
+    {
+        public HospitalDB(DbContextOptions<HospitalDB> options) : base(options) { }
+
+        public DbSet<Hospital> Hospitals {get; set;}
+    }
+}
