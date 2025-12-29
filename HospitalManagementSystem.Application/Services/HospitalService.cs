@@ -46,7 +46,14 @@ namespace HospitalManagementSystem.Application.Services
 
         public async Task Update(int id, HospitalDTO hospitalDTO)
         {
-            await _repo.Update(await _repo.GetById(id));
+            var hospital = await _repo.GetById(id);
+            if (hospital == null)
+                throw new Exception("Invalid Id");
+
+            hospital.Name = hospitalDTO.Name;
+            hospital.Location = hospitalDTO.Location;
+
+            await _repo.Update(hospital);
         }
         
         public async Task Delete(int id)

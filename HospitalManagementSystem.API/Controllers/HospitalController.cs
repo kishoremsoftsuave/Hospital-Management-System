@@ -20,32 +20,36 @@ namespace HospitalManagementSystem.API.Controllers
             return Ok(await _service.GetAll());
         }
 
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            return Ok(await _service.GetById(id));
+            var hospital = await _service.GetById(id);
+            if (hospital == null)
+                return NotFound("Hospital not found");
+
+            return Ok(hospital);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(HospitalDTO hospitalDTO)
         {
             await _service.Create(hospitalDTO);
-            return Ok();
+            return Ok("Hospital created successfully");
         }
 
 
-        [HttpPut("/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, HospitalDTO hospitalDTO)
         {
             await _service.Update(id, hospitalDTO);
-            return Ok();
+            return Ok("Hospital updated successfully");
         }
 
-        [HttpDelete("/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _service.Delete(id);
-            return Ok();
+            return Ok("Hospital deleted successfully");
         }
     }
 }

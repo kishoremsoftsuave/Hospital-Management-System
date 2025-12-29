@@ -1,11 +1,9 @@
-﻿using HospitalManagementSystem.Application.DTO;
-using HospitalManagementSystem.Application.Interfaces;
+﻿using HospitalManagementSystem.Application.Interfaces;
 using HospitalManagementSystem.Domain.Entities;
 using HospitalManagementSystem.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace HospitalManagementSystem.Infrastructure.Repository
 {
@@ -22,9 +20,9 @@ namespace HospitalManagementSystem.Infrastructure.Repository
             return await _dbContext.Hospitals.ToListAsync();
         }
 
-        public async Task<Hospital> GetById(int id)
+        public async Task<Hospital?> GetById(int id)
         {
-            return await _dbContext.Hospitals.FirstAsync();
+            return await _dbContext.Hospitals.FirstOrDefaultAsync(h => h.Id == id);
         }
         public async Task Create(Hospital hospital)
         {
