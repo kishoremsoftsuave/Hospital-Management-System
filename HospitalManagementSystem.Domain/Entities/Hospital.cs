@@ -9,7 +9,7 @@ namespace HospitalManagementSystem.Domain.Entities
         public int Id { get; set; }
         public required string Name { get; set; }
         public required string Location { get; set; }
-        public ICollection<Doctor> Doctors { get; set; }
+        public ICollection<Doctor> Doctors { get; set; } = new List<Doctor>();
 
     }
 }

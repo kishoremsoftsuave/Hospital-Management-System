@@ -10,5 +10,6 @@ namespace HospitalManagementSystem.Domain.Entities
         public required string Name { get; set; }
         public required string Specialization { get; set; }
         public required int HospitalId { get; set; }
+        public ICollection<Patient> Patients { get; set; } = new List<Patient>();
     }
 }

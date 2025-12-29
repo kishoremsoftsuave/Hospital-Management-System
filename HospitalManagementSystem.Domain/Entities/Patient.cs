@@ -10,5 +10,7 @@ namespace HospitalManagementSystem.Domain.Entities
         public required string Name { get; set; }
         public int Age { get; set; }
         public int DoctorId { get; set; }
+        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public ICollection<MedicalRecord> MedicalRecords { get; set; } = new List<MedicalRecord>();
     }
 }
