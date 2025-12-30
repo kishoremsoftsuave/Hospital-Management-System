@@ -55,7 +55,6 @@ namespace HospitalManagementSystem.API.Controllers
             if (hospital == null)
                 return NotFound("Invalid Hospital ID");
             await _service.Delete(id);
-            await _service.Delete(id);
             return Ok("Hospital deleted successfully");
         }
     }
