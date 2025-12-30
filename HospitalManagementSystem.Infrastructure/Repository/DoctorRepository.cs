@@ -10,8 +10,8 @@ namespace HospitalManagementSystem.Infrastructure.Repository
 {
     public class DoctorRepository : IDoctorRepository
     {
-        private readonly DoctorDB _dbContext;
-        public DoctorRepository(DoctorDB dbContext)
+        private readonly HospitalDB _dbContext;
+        public DoctorRepository(HospitalDB dbContext)
         {
             _dbContext = dbContext;
         }
@@ -20,25 +20,29 @@ namespace HospitalManagementSystem.Infrastructure.Repository
         {
             return await _dbContext.Doctors.ToListAsync();
         }
-
-        public Task Create(Doctor doctor)
+        public async Task<Doctor?> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await (_dbContext.Doctors.FirstOrDefaultAsync(x => x.Id == id));
         }
 
-        public Task Delete(int id)
+        public async Task Create(Doctor doctor)
         {
-            throw new NotImplementedException();
+            _dbContext.Doctors.Add(doctor);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task<Doctor> GetById(int id)
+        public async Task Update(Doctor doctor)
         {
-            throw new NotImplementedException();
+            _dbContext.Doctors.Update(doctor);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task Update(Doctor doctor)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            var doctor = await _dbContext.Doctors.FindAsync(id);
+            if (doctor is null) return;
+            _dbContext.Doctors.Remove(doctor);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

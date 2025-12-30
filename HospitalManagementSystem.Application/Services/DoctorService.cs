@@ -5,6 +5,7 @@ using HospitalManagementSystem.Application.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using HospitalManagementSystem.Domain.Entities;
 
 namespace HospitalManagementSystem.Application.Services
 {
@@ -26,28 +27,35 @@ namespace HospitalManagementSystem.Application.Services
             //    Specialization = d.Specialization,
             //    HospitalId = d.HospitalId
             //}).ToList();
+
             var doctor = await _repo.GetAll();
-            return _mapper.Map<List<DoctorDTO>>(doctor);
+            return _mapper.Map<List<DoctorDTO>>(doctor); // We use this instead of normal
             
         }
-        public Task Create(DoctorDTO doctorDTO)
+
+        public async Task<DoctorDTO> GetById(int id)
         {
-            throw new NotImplementedException();
+            var doctor = await _repo.GetById(id);
+            return _mapper.Map<DoctorDTO>(doctor);
         }
 
-        public Task Delete(int id)
+        public async Task Create(DoctorDTO doctorDTO)
         {
-            throw new NotImplementedException();
+            var doctor = _mapper.Map<Doctor>(doctorDTO);
+            await _repo.Create(doctor);
         }
 
-        public Task<DoctorDTO> GetById(int id)
+        public async Task Update(int id, DoctorDTO doctorDTO)
         {
-            throw new NotImplementedException();
+            var doctor = await _repo.GetById(id);
+            if (doctor is null) return;
+            _mapper.Map(doctorDTO, doctor);
+            await _repo.Update(doctor);
         }
 
-        public Task Update(int id, DoctorDTO doctorDTO)
+        public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            await _repo.Delete(id);
         }
     }
 }

@@ -47,9 +47,7 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Update(int id, HospitalDTO hospitalDTO)
         {
             var hospital = await _repo.GetById(id);
-            if (hospital == null)
-                throw new Exception("Invalid Id");
-
+            if (hospital == null) return;
             hospital.Name = hospitalDTO.Name;
             hospital.Location = hospitalDTO.Location;
 

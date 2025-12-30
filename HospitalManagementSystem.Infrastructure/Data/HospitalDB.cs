@@ -11,5 +11,6 @@ namespace HospitalManagementSystem.Infrastructure.Data
         public HospitalDB(DbContextOptions<HospitalDB> options) : base(options) { }
 
         public DbSet<Hospital> Hospitals {get; set;}
+        public DbSet<Doctor> Doctors { get; set; }
     }
 }
