@@ -21,7 +21,7 @@ builder.Services.AddDbContext<HospitalDB>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // ? AutoMapper (CORRECT)
-builder.Services.AddAutoMapper(typeof(AutoMap));
+builder.Services.AddAutoMapper(typeof(AutoMap).Assembly);
 
 // DI
 builder.Services.AddScoped<IHospitalService, HospitalService>();
