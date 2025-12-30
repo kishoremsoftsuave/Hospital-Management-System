@@ -1,28 +1,36 @@
+using AutoMapper;
+using HospitalManagementSystem.Application.AutoMapping;
 using HospitalManagementSystem.Application.Interfaces;
 using HospitalManagementSystem.Application.Services;
 using HospitalManagementSystem.Infrastructure.Data;
 using HospitalManagementSystem.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Controllers
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
+// ? Swagger
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// DbContext
 builder.Services.AddDbContext<HospitalDB>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// ? AutoMapper (CORRECT)
+builder.Services.AddAutoMapper(typeof(AutoMap));
+
+// DI
 builder.Services.AddScoped<IHospitalService, HospitalService>();
 builder.Services.AddScoped<IHospitalRepository, HospitalRepository>();
+builder.Services.AddScoped<IDoctorService, DoctorService>();
+builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -30,9 +38,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
