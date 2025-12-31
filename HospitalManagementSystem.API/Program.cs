@@ -1,11 +1,10 @@
-using AutoMapper;
 using HospitalManagementSystem.Application.AutoMapping;
 using HospitalManagementSystem.Application.Interfaces;
 using HospitalManagementSystem.Application.Services;
 using HospitalManagementSystem.Infrastructure.Data;
 using HospitalManagementSystem.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

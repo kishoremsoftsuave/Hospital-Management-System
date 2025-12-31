@@ -12,5 +12,6 @@ namespace HospitalManagementSystem.Infrastructure.Data
 
         public DbSet<Hospital> Hospitals {get; set;}
         public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Patient> Patients {get; set;}
     }
 }
