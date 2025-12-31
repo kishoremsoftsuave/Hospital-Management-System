@@ -10,4 +10,9 @@ namespace HospitalManagementSystem.Application.DTO
         public int Age { get; set; }
         public int DoctorId { get; set; }
     }
+    public class PatientCreateDTO
+    {
+        public required string Name { get; set; }
+        public int Age { get; set; }
+    }
 }

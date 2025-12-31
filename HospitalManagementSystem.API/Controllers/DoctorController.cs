@@ -1,5 +1,6 @@
 ﻿using HospitalManagementSystem.Application.DTO;
 using HospitalManagementSystem.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,12 +16,14 @@ namespace HospitalManagementSystem.API.Controllers
             _service = service; 
         }
 
+        [Authorize(Roles = "Admin,Doctor")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _service.GetAll());
         }
 
+        [Authorize(Roles = "Admin,Doctor")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -30,6 +33,7 @@ namespace HospitalManagementSystem.API.Controllers
             return Ok(doctor);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(DoctorDTO doctorDTO)
         {
@@ -37,6 +41,7 @@ namespace HospitalManagementSystem.API.Controllers
             return Ok("Doctor Created Successfully");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id,  DoctorDTO doctorDTO)
         {
@@ -47,6 +52,7 @@ namespace HospitalManagementSystem.API.Controllers
             return Ok("Doctor Updated Successfully");
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
