@@ -9,10 +9,12 @@ namespace HospitalManagementSystem.Domain.Entities
         // { "id": "a4001", "patient_id": "p3001", "doctor_id": "d2001", "appointment_date": "2025-01-10", "status": "Confirmed" }
 
         public int Id { get; set; }
-        public required int PatientId {  get; set; }
-        public int DoctorId { get; set; }
-        public required DateOnly AppointmentDate {  get; set; }
+        public DateOnly AppointmentDate { get; set; }
         public string Status { get; set; } = string.Empty;
+        public int PatientId {  get; set; }
+        public Patient Patient { get; set; } = null!;
+        public int DoctorId { get; set; }
+        public Doctor Doctor { get; set; } = null!;
 
     }
 }

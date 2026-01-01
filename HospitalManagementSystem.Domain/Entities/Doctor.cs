@@ -7,9 +7,11 @@ namespace HospitalManagementSystem.Domain.Entities
     public class Doctor
     {
         public int Id { get; set; }
-        public required string Name { get; set; }
-        public required string Specialization { get; set; }
-        public required int HospitalId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Specialization { get; set; } = string.Empty;
+        public int HospitalId { get; set; }
+        public Hospital Hospital { get; set; } = null!;
         public ICollection<Patient> Patients { get; set; } = new List<Patient>();
+        public ICollection<Prescription> prescriptions { get; set; } = new List<Prescription>();
     }
 }

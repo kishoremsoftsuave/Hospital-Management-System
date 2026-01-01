@@ -7,9 +7,12 @@ namespace HospitalManagementSystem.Domain.Entities
     public class Prescription
     {
         public int Id { get; set; }
-        public required int DoctorId { get; set; }
-        public required int PatientId { get; set; }
-        public required DateOnly IssuedDate { get; set; }
+        public DateOnly IssuedDate { get; set; }
+        public int DoctorId { get; set; }
+        public Doctor Doctor { get; set; } = null!;
+        public int PatientId { get; set; }
+        public Patient Patient { get; set; } = null!;
+
 
     }
 }
