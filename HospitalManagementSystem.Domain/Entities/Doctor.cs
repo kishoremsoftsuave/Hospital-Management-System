@@ -12,6 +12,6 @@ namespace HospitalManagementSystem.Domain.Entities
         public int HospitalId { get; set; }
         public Hospital Hospital { get; set; } = null!;
         public ICollection<Patient> Patients { get; set; } = new List<Patient>();
-        public ICollection<Prescription> prescriptions { get; set; } = new List<Prescription>();
+        public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
     }
 }

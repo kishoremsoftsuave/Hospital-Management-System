@@ -16,5 +16,38 @@ namespace HospitalManagementSystem.Infrastructure.Data
         public DbSet<Appointment> appointments {get; set;}
         public DbSet<MedicalRecord> medicalRecords {get; set;}
         public DbSet<Prescription> prescriptions {get; set;}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Doctor>()
+                .HasOne(d => d.Hospital)
+                .WithMany(h => h.Doctors)
+                .HasForeignKey(d => d.HospitalId);
+
+            modelBuilder.Entity<Patient>()
+                .HasOne(p => p.Doctor)
+                .WithMany(d => d.Patients)
+                .HasForeignKey(p => p.DoctorId);
+
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Patient)
+                .WithMany(p => p.Appointments)
+                .HasForeignKey(a => a.PatientId);
+
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Doctor)
+                .WithMany()
+                .HasForeignKey(a => a.DoctorId);
+
+            modelBuilder.Entity<Prescription>()
+                .HasOne(p => p.Doctor)
+                .WithMany(d => d.Prescriptions)
+                .HasForeignKey(p => p.DoctorId);
+
+            modelBuilder.Entity<MedicalRecord>()
+                .HasOne(m => m.Patient)
+                .WithMany(p => p.MedicalRecords)
+                .HasForeignKey(m => m.PatientId);
+        }
+
     }
 }
