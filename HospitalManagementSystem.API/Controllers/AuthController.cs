@@ -34,6 +34,11 @@ namespace HospitalManagementSystem.API.Controllers
                 return Ok(_tokenService.CreateToken(3, Roles.Receptionist));
             }
 
+            if (username == "patient" && password == "pat123")
+            {
+                return Ok(_tokenService.CreateToken(4, Roles.Patient));
+            }
+
             return Unauthorized("Invalid credentials");
         }
     }

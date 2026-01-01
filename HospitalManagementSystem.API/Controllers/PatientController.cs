@@ -24,7 +24,7 @@ namespace HospitalManagementSystem.API.Controllers
 
         }
 
-        [Authorize(Roles = "Admin,Doctor,Receptionist")]
+        [Authorize(Roles = "Admin,Doctor,Receptionist,Patient")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
