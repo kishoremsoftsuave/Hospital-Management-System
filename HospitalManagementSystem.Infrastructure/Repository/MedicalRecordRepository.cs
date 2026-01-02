@@ -18,31 +18,30 @@ namespace HospitalManagementSystem.Infrastructure.Repository
 
         public async Task<List<MedicalRecord>> GetAll()
         {
-            return await _dbContext.medicalRecords.ToListAsync();
+            return await _dbContext.MedicalRecords.ToListAsync();
         }
         public async Task<MedicalRecord?> GetById(int id)
         {
-            return await (_dbContext.medicalRecords.FirstOrDefaultAsync(x => x.Id == id));
+            return await (_dbContext.MedicalRecords.FirstOrDefaultAsync(x => x.Id == id));
         }
 
         public async Task Create(MedicalRecord medicalRecord)
         {
-            _dbContext.medicalRecords.Add(medicalRecord);
+            _dbContext.MedicalRecords.Add(medicalRecord);
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task Update(MedicalRecord medicalRecord)
         {
-            _dbContext.medicalRecords.Update(medicalRecord);
+            _dbContext.MedicalRecords.Update(medicalRecord);
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task Delete(int id)
         {
-            var medicalRecord = await _dbContext.Hospitals.FirstOrDefaultAsync(d => d.Id == id);
+            var medicalRecord = await _dbContext.MedicalRecords.IgnoreQueryFilters().FirstOrDefaultAsync(d => d.Id == id);
             if (medicalRecord is null) return;
             medicalRecord.IsDeleted = true;
-            _dbContext.Hospitals.Update(medicalRecord);
             await _dbContext.SaveChangesAsync();
         }
     }

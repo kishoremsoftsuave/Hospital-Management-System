@@ -13,9 +13,9 @@ namespace HospitalManagementSystem.Infrastructure.Data
         public DbSet<Hospital> Hospitals {get; set;}
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Patient> Patients {get; set;}
-        public DbSet<Appointment> appointments {get; set;}
-        public DbSet<MedicalRecord> medicalRecords {get; set;}
-        public DbSet<Prescription> prescriptions {get; set;}
+        public DbSet<Appointment> Appointments {get; set;}
+        public DbSet<MedicalRecord> MedicalRecords {get; set;}
+        public DbSet<Prescription> Prescriptions {get; set;}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Doctor>()

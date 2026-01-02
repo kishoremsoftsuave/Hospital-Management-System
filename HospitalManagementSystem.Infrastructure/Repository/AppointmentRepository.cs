@@ -19,31 +19,30 @@ namespace HospitalManagementSystem.Infrastructure.Repository
 
         public async Task<List<Appointment>> GetAll()
         {
-            return await _dbContext.appointments.ToListAsync();
+            return await _dbContext.Appointments.ToListAsync();
         }
         public async Task<Appointment?> GetById(int id)
         {
-            return await (_dbContext.appointments.FirstOrDefaultAsync(x => x.Id == id));
+            return await (_dbContext.Appointments.FirstOrDefaultAsync(x => x.Id == id));
         }
 
         public async Task Create(Appointment appointment)
         {
-            _dbContext.appointments.Add(appointment);
+            _dbContext.Appointments.Add(appointment);
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task Update(Appointment appointment)
         {
-            _dbContext.appointments.Update(appointment);
+            _dbContext.Appointments.Update(appointment);
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task Delete(int id)
         {
-            var appointment = await _dbContext.Hospitals.FirstOrDefaultAsync(d => d.Id == id);
+            var appointment = await _dbContext.Appointments.IgnoreQueryFilters().FirstOrDefaultAsync(d => d.Id == id);
             if (appointment is null) return;
             appointment.IsDeleted = true;
-            _dbContext.Hospitals.Update(appointment);
             await _dbContext.SaveChangesAsync();
         }
     }

@@ -4,6 +4,7 @@ using HospitalManagementSystem.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalManagementSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(HospitalDB))]
-    partial class HospitalDBModelSnapshot : ModelSnapshot
+    [Migration("20260102130819_six_enum_delete")]
+    partial class six_enum_delete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,7 +57,7 @@ namespace HospitalManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("appointments");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Domain.Entities.Doctor", b =>
@@ -136,7 +139,7 @@ namespace HospitalManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("MedicalRecords");
+                    b.ToTable("medicalRecords");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Domain.Entities.Patient", b =>
@@ -197,7 +200,7 @@ namespace HospitalManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Prescriptions");
+                    b.ToTable("prescriptions");
                 });
 
             modelBuilder.Entity("HospitalManagementSystem.Domain.Entities.Appointment", b =>
