@@ -31,8 +31,8 @@ namespace HospitalManagementSystem.Application.Services
 
         public async Task Create(AppointmentDTO appointmentDTO)
         {
-            var Appointment = _mapper.Map<Appointment>(appointmentDTO);
-            await _repo.Create(Appointment);
+            var appointment = _mapper.Map<Appointment>(appointmentDTO);
+            await _repo.Create(appointment);
         }
 
         public async Task Update(int id, AppointmentDTO appointmentDTO)
