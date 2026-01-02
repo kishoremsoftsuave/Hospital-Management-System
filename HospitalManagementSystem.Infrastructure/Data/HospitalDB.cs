@@ -40,6 +40,11 @@ namespace HospitalManagementSystem.Infrastructure.Data
                 .HasForeignKey(a => a.DoctorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Appointment>()
+                .Property(a => a.Status)
+                .HasConversion<string>();
+
+
             modelBuilder.Entity<Prescription>()
                 .HasOne(p => p.Doctor)
                 .WithMany(d => d.Prescriptions)
@@ -49,6 +54,31 @@ namespace HospitalManagementSystem.Infrastructure.Data
                 .HasOne(m => m.Patient)
                 .WithMany(p => p.MedicalRecords)
                 .HasForeignKey(m => m.PatientId);
+
+            modelBuilder.Entity<Doctor>()
+                .HasQueryFilter(d => !d.IsDeleted)
+                .Property(d => d.IsDeleted)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<Patient>()
+                .HasQueryFilter(p => !p.IsDeleted)
+                .Property(p => p.IsDeleted)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<Appointment>()
+                .HasQueryFilter(a => !a.IsDeleted)
+                .Property(a => a.IsDeleted)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<Prescription>()
+                .HasQueryFilter(p => !p.IsDeleted)
+                .Property(p => p.IsDeleted)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<MedicalRecord>()
+                .HasQueryFilter(m => !m.IsDeleted)
+                .Property(m => m.IsDeleted)
+                .HasDefaultValue(false);
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using HospitalManagementSystem.Application.DTO;
+﻿using AutoMapper;
+using HospitalManagementSystem.Application.DTO;
 using HospitalManagementSystem.Application.Interfaces;
 using HospitalManagementSystem.Domain.Entities;
 using System;
@@ -10,38 +11,28 @@ namespace HospitalManagementSystem.Application.Services
     public class HospitalService : IHospitalService
     {
         private readonly IHospitalRepository _repo;
-        public HospitalService(IHospitalRepository repo)
+        private readonly IMapper _mapper;
+        public HospitalService(IHospitalRepository repo, IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         public async Task<List<HospitalDTO>> GetAll()
         {
-            return (await _repo.GetAll()).Select(h => new HospitalDTO
-            {
-                Name = h.Name,
-                Location = h.Location
-            }).ToList();
+            var hospital = await _repo.GetAll();
+            return _mapper.Map<List<HospitalDTO>>(hospital);
         }
 
         public async Task<HospitalDTO> GetById(int id)
-        {   
-            var h = await _repo.GetById(id);
-            if (h is null)
-                throw new Exception("Invalid Id");
-            return new HospitalDTO
-            {
-                Name = h.Name,
-                Location = h.Location
-            };
+        {
+            var hospital = await _repo.GetById(id);
+            return _mapper.Map<HospitalDTO>(hospital);
         }
         public async Task Create(HospitalDTO hospitalDTO)
         {
-            await _repo.Create(new Hospital
-            {
-                Name = hospitalDTO.Name,
-                Location = hospitalDTO.Location
-            });
+            var hospital = _mapper.Map<Hospital>(hospitalDTO);
+            await _repo.Create(hospital);
         }
 
         public async Task Update(int id, HospitalDTO hospitalDTO)
@@ -56,6 +47,9 @@ namespace HospitalManagementSystem.Application.Services
         
         public async Task Delete(int id)
         {
+            var hospital = await _repo.GetById(id);
+            if (hospital is not null)
+                if (hospital.IsDeleted) throw new Exception("Hospital is already deleted.");
             await _repo.Delete(id);
         }   
     }

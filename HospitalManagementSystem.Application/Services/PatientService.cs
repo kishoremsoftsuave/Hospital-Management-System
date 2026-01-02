@@ -45,6 +45,9 @@ namespace HospitalManagementSystem.Application.Services
 
         public async Task Delete(int id)
         {
+            var patient = await _repo.GetById(id);
+            if (patient is not null)
+                if (patient.IsDeleted) throw new Exception("Patient is already deleted.");
             await _repo.Delete(id);
         }
     }

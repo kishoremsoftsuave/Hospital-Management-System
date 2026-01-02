@@ -29,7 +29,7 @@ namespace HospitalManagementSystem.API.Controllers
                 return Ok(_tokenService.CreateToken(2, Roles.Doctor));
             }
 
-            if (username == "reception" && password == "rec123")
+            if (username == "reception" && password == "rec123")    
             {
                 return Ok(_tokenService.CreateToken(3, Roles.Receptionist));
             }

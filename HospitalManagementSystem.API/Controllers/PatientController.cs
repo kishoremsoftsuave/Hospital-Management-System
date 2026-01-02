@@ -33,7 +33,7 @@ namespace HospitalManagementSystem.API.Controllers
                 return NotFound("Invalid Patient Id");
             return Ok(patient);
         }
-
+        [Authorize(Roles = "Admin,Doctor,Receptionist")]
         [HttpPost]
         public async Task<IActionResult> Create(PatientDTO patientDTO)
         {

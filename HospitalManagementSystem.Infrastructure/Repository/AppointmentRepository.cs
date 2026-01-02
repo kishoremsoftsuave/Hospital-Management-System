@@ -40,9 +40,10 @@ namespace HospitalManagementSystem.Infrastructure.Repository
 
         public async Task Delete(int id)
         {
-            var appointment = await _dbContext.appointments.FindAsync(id);
+            var appointment = await _dbContext.Hospitals.FirstOrDefaultAsync(d => d.Id == id);
             if (appointment is null) return;
-            _dbContext.appointments.Remove(appointment);
+            appointment.IsDeleted = true;
+            _dbContext.Hospitals.Update(appointment);
             await _dbContext.SaveChangesAsync();
         }
     }

@@ -10,6 +10,7 @@ namespace HospitalManagementSystem.Domain.Entities
         public string Diagnosis { get; set; } = string.Empty;
         public int PatientId { get; set; }
         public Patient Patient { get; set; } = null!;
+        public bool IsDeleted { get; set; } = false;
 
     }
 }

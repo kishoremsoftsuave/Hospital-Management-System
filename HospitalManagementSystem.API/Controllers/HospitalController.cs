@@ -29,8 +29,7 @@ namespace HospitalManagementSystem.API.Controllers
         {
             var hospital = await _service.GetById(id);
             if (hospital == null)
-                return NotFound("Hospital not found");
-
+                return NotFound("Hospital Not Found");
             return Ok(hospital);
         }
 
@@ -48,7 +47,7 @@ namespace HospitalManagementSystem.API.Controllers
         {
             var hospital = await _service.GetById(id);
             if (hospital == null)
-                return NotFound("Invalid Hospital ID");
+                return NotFound("Invalid Hospital Id");
             await _service.Update(id, hospitalDTO);
             return Ok("Hospital updated successfully");
         }
@@ -59,7 +58,7 @@ namespace HospitalManagementSystem.API.Controllers
         {
             var hospital = await _service.GetById(id);
             if (hospital == null)
-                return NotFound("Invalid Hospital ID");
+                return NotFound("Invalid Hospital Id");
             await _service.Delete(id);
             return Ok("Hospital deleted successfully");
         }

@@ -45,6 +45,9 @@ namespace HospitalManagementSystem.Application.Services
 
         public async Task Delete(int id)
         {
+            var prescription = await _repo.GetById(id);
+            if (prescription is not null)
+                if (prescription.IsDeleted) throw new Exception("Prescription is already deleted.");
             await _repo.Delete(id);
         }
     }

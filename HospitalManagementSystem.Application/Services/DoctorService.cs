@@ -21,15 +21,8 @@ namespace HospitalManagementSystem.Application.Services
 
         public async Task<List<DoctorDTO>> GetAll()
         {
-            //return (await _repo.GetAll()).Select(d => new DoctorDTO
-            //{
-            //    Name = d.Name,
-            //    Specialization = d.Specialization,
-            //    HospitalId = d.HospitalId
-            //}).ToList();
-
             var doctor = await _repo.GetAll();
-            return _mapper.Map<List<DoctorDTO>>(doctor); // We use this instead of normal
+            return _mapper.Map<List<DoctorDTO>>(doctor); 
             
         }
 
@@ -55,6 +48,9 @@ namespace HospitalManagementSystem.Application.Services
 
         public async Task Delete(int id)
         {
+            var doctor = await _repo.GetById(id);
+            if (doctor is not null)
+                if (doctor.IsDeleted) throw new Exception("Doctor is already deleted.");
             await _repo.Delete(id);
         }
     }

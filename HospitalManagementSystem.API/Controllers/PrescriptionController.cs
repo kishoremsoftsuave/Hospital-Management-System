@@ -24,7 +24,7 @@ namespace HospitalManagementSystem.API.Controllers
 
         }
 
-        [Authorize(Roles = "Admin,Doctor")]
+        [Authorize(Roles = "Admin,Doctor,patient")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -33,7 +33,7 @@ namespace HospitalManagementSystem.API.Controllers
                 return NotFound("Invalid Prescription Id");
             return Ok(prescription);
         }
-
+        [Authorize(Roles = "Doctor")]
         [HttpPost]
         public async Task<IActionResult> Create(PrescriptionDTO prescriptionDTO)
         {
@@ -52,11 +52,10 @@ namespace HospitalManagementSystem.API.Controllers
             return Ok("Prescription Updated Successfully");
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Doctor")]
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
-        {
-            var prescription = await _service.GetById(id);
+        {   var prescription = await _service.GetById(id);
             if (prescription == null)
                 return NotFound("Invalid Prescription Id");
             await _service.Delete(id);

@@ -13,5 +13,6 @@ namespace HospitalManagementSystem.Domain.Entities
         public Hospital Hospital { get; set; } = null!;
         public ICollection<Patient> Patients { get; set; } = new List<Patient>();
         public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
+        public bool IsDeleted { get; set; } = false;
     }
 }
