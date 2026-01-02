@@ -12,8 +12,8 @@ namespace HospitalManagementSystem.Application.AutoMapping
             CreateMap<Doctor, DoctorDTO>().ReverseMap();
             CreateMap<Patient, PatientDTO>().ReverseMap();
             CreateMap<Patient, PatientCreateDTO>().ReverseMap();
-            //CreateMap<Appointment, AppointmentDTO>().ReverseMap();
-            //CreateMap<MedicalRecord, MedicalRecordDTO>().ReverseMap();
+            CreateMap<Appointment, AppointmentDTO>().ReverseMap();
+            CreateMap<MedicalRecord, MedicalRecordDTO>().ReverseMap();
             //CreateMap<Prescription, PrescriptionDTO>().ReverseMap();
         } 
     }

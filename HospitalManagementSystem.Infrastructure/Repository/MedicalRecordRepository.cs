@@ -1,0 +1,48 @@
+﻿using HospitalManagementSystem.Application.Interfaces;
+using HospitalManagementSystem.Domain.Entities;
+using HospitalManagementSystem.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace HospitalManagementSystem.Infrastructure.Repository
+{
+    public class MedicalRecordsRepository : IMedicalRecordRepository
+    {
+        private readonly HospitalDB _dbContext;
+        public MedicalRecordsRepository(HospitalDB dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public async Task<List<MedicalRecord>> GetAll()
+        {
+            return await _dbContext.medicalRecords.ToListAsync();
+        }
+        public async Task<MedicalRecord?> GetById(int id)
+        {
+            return await (_dbContext.medicalRecords.FirstOrDefaultAsync(x => x.Id == id));
+        }
+
+        public async Task Create(MedicalRecord medicalRecord)
+        {
+            _dbContext.medicalRecords.Add(medicalRecord);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task Update(MedicalRecord medicalRecord)
+        {
+            _dbContext.medicalRecords.Update(medicalRecord);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task Delete(int id)
+        {
+            var medicalRecord = await _dbContext.medicalRecords.FindAsync(id);
+            if (medicalRecord is not null)
+                _dbContext.medicalRecords.Remove(medicalRecord);
+                await _dbContext.SaveChangesAsync();
+        }
+    }
+}
