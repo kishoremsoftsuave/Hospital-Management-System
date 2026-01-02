@@ -26,7 +26,8 @@ namespace HospitalManagementSystem.Infrastructure.Data
             modelBuilder.Entity<Patient>()
                 .HasOne(p => p.Doctor)
                 .WithMany(d => d.Patients)
-                .HasForeignKey(p => p.DoctorId);
+                .HasForeignKey(p => p.DoctorId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Appointment>()
                 .HasOne(a => a.Patient)
@@ -36,7 +37,8 @@ namespace HospitalManagementSystem.Infrastructure.Data
             modelBuilder.Entity<Appointment>()
                 .HasOne(a => a.Doctor)
                 .WithMany()
-                .HasForeignKey(a => a.DoctorId);
+                .HasForeignKey(a => a.DoctorId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Prescription>()
                 .HasOne(p => p.Doctor)
