@@ -19,6 +19,10 @@ namespace HospitalManagementSystem.Application.AutoMapping
                 .ForMember(d => d.DoctorName,o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.HospitalName,o => o.MapFrom(s => s.Hospital.Name))
                 .ForMember(d => d.HospitalAddress,o => o.MapFrom(s => s.Hospital.Location));
+            CreateMap<Doctor, HospitalDoctorDTO>()
+                .ForMember(d => d.DoctorName, o => o.MapFrom(s => s.Name));
+            CreateMap<Hospital, HospitalDetailDTO>()
+                .ForMember(d => d.HospitalName, o => o.MapFrom(s => s.Name));
 
         }
     }

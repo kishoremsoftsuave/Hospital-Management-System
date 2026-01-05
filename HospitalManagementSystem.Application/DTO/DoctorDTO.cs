@@ -17,4 +17,9 @@ namespace HospitalManagementSystem.Application.DTO
         public string HospitalName { get; set; } = string.Empty;
         public string HospitalAddress { get; set; } = string.Empty;
     }
+    public class  HospitalDoctorDTO
+    {
+        public string DoctorName { get; set; } = string.Empty;
+        public string Specialization { get; set; } = string.Empty;
+    }
 }

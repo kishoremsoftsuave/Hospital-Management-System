@@ -18,16 +18,16 @@ namespace HospitalManagementSystem.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<List<HospitalDTO>> GetAll()
+        public async Task<List<HospitalDetailDTO>> GetAll()
         {
             var hospital = await _repo.GetAll();
-            return _mapper.Map<List<HospitalDTO>>(hospital);
+            return _mapper.Map<List<HospitalDetailDTO>>(hospital);
         }
 
-        public async Task<HospitalDTO> GetById(int id)
+        public async Task<HospitalDetailDTO> GetById(int id)
         {
             var hospital = await _repo.GetById(id);
-            return _mapper.Map<HospitalDTO>(hospital);
+            return _mapper.Map<HospitalDetailDTO>(hospital);
         }
         public async Task Create(HospitalDTO hospitalDTO)
         {

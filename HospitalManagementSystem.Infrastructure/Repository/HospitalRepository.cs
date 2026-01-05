@@ -17,12 +17,12 @@ namespace HospitalManagementSystem.Infrastructure.Repository
 
         public async Task<List<Hospital>> GetAll()
         {
-            return await _dbContext.Hospitals.ToListAsync();
+            return await _dbContext.Hospitals.Include(h => h.Doctors).ToListAsync();
         }
 
         public async Task<Hospital?> GetById(int id)
         {
-            return await _dbContext.Hospitals.FirstOrDefaultAsync(h => h.Id == id);
+            return await _dbContext.Hospitals.Include(h => h.Doctors).FirstOrDefaultAsync(h => h.Id == id);
         }
         public async Task Create(Hospital hospital)
         {

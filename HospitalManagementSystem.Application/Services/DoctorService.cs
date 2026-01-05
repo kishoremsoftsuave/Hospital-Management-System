@@ -12,11 +12,13 @@ namespace HospitalManagementSystem.Application.Services
     public class DoctorService : IDoctorService
     {
         private readonly IDoctorRepository _repo;
+        private readonly IHospitalRepository _hospitalRepo;
         private readonly IMapper _mapper;
-        public DoctorService(IDoctorRepository repo, IMapper mapper)
+        public DoctorService(IDoctorRepository repo, IMapper mapper, IHospitalRepository hospitalRepo)
         {
             _repo = repo;
             _mapper = mapper;
+            _hospitalRepo = hospitalRepo;
         }
 
         public async Task<List<DoctorDetailDTO>> GetAll()
@@ -34,6 +36,9 @@ namespace HospitalManagementSystem.Application.Services
 
         public async Task Create(DoctorDTO doctorDTO)
         {
+            var hospital = await _hospitalRepo.GetById(doctorDTO.HospitalId);
+            if (hospital == null)
+                throw new Exception("Hospital not found");
             var doctor = _mapper.Map<Doctor>(doctorDTO);
             await _repo.Create(doctor);
         }
@@ -42,6 +47,9 @@ namespace HospitalManagementSystem.Application.Services
         {
             var doctor = await _repo.GetById(id);
             if (doctor is null) return;
+            var hospital = await _hospitalRepo.GetById(doctorDTO.HospitalId);
+            if (hospital == null)
+                throw new Exception("Hospital not found");
             _mapper.Map(doctorDTO, doctor);
             await _repo.Update(doctor);
         }

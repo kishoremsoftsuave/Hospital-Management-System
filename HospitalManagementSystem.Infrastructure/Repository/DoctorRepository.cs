@@ -19,11 +19,11 @@ namespace HospitalManagementSystem.Infrastructure.Repository
 
         public async Task<List<Doctor>> GetAll()
         {
-            return await _dbContext.Doctors.ToListAsync();
+            return await _dbContext.Doctors.Include(d => d.Hospital).ToListAsync();
         }
         public async Task<Doctor?> GetById(int id)
         {
-            return await (_dbContext.Doctors.FirstOrDefaultAsync(x => x.Id == id));
+            return await (_dbContext.Doctors.Include(d => d.Hospital).FirstOrDefaultAsync(x => x.Id == id));
         }
 
         public async Task Create(Doctor doctor)

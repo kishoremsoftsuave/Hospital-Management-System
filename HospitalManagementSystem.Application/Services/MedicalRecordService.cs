@@ -11,11 +11,13 @@ namespace HospitalManagementSystem.Application.Services
     public class MedicalRecordService : IMedicalRecordService
     {
         private readonly IMedicalRecordRepository _repo;
+        private readonly IPatientRepository _patientRepo;
         private readonly IMapper _mapper;
-        public MedicalRecordService(IMedicalRecordRepository repo, IMapper mapper)
+        public MedicalRecordService(IMedicalRecordRepository repo, IMapper mapper, IPatientRepository patientRepo)
         {
             _repo = repo;
             _mapper = mapper;
+            _patientRepo = patientRepo;
         }
         public async Task<List<MedicalRecordDTO>> GetAll()
         {
@@ -31,6 +33,9 @@ namespace HospitalManagementSystem.Application.Services
 
         public async Task Create(MedicalRecordDTO medicalRecordDTO)
         {
+            var patientExists = await _patientRepo.GetById(medicalRecordDTO.PatientId);
+            if (patientExists == null)
+                throw new Exception("Patient does not exist.");
             var medicalRecord = _mapper.Map<MedicalRecord>(medicalRecordDTO);
             await _repo.Create(medicalRecord);
         }
@@ -39,6 +44,9 @@ namespace HospitalManagementSystem.Application.Services
         {
             var medicalRecord = await _repo.GetById(id);
             if (medicalRecord == null) return;
+            var patientExists = await _patientRepo.GetById(medicalRecordDTO.PatientId);
+            if (patientExists == null)
+                throw new Exception("Patient does not exist.");
             _mapper.Map(medicalRecordDTO, medicalRecord);
             await _repo.Update(medicalRecord);
         }
