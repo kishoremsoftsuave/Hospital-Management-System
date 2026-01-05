@@ -1,4 +1,4 @@
-using HospitalManagementSystem.Application.Auth;
+using HospitalManagementSystem.Application.Configuratioon;
 using HospitalManagementSystem.Application.AutoMapping;
 using HospitalManagementSystem.Application.Interfaces;
 using HospitalManagementSystem.Application.Services;
@@ -90,7 +90,7 @@ builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 
 // Repositories
-builder.Services.AddScoped<IHospitalRepository, HospitalRepository>();
+builder.Services.AddScoped<IHospitalRepositoryElastic, HospitalRepository>();
 builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();

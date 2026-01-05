@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HospitalManagementSystem.Infrastructure.Repository
 {
-    public class HospitalRepository : IHospitalRepository
+    public class HospitalRepository : IHospitalRepositoryElastic
     {
         private readonly HospitalDB _dbContext;
         public HospitalRepository (HospitalDB dbContext)

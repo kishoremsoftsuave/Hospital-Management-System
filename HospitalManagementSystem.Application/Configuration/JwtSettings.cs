@@ -1,4 +1,4 @@
-﻿namespace HospitalManagementSystem.Application.Auth
+﻿namespace HospitalManagementSystem.Application.Configuratioon
 {
     public class JwtSettings
     {
