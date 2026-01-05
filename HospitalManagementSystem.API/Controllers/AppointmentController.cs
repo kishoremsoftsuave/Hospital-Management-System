@@ -1,5 +1,6 @@
 ﻿using HospitalManagementSystem.Application.DTO;
 using HospitalManagementSystem.Application.Interfaces;
+using HospitalManagementSystem.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -45,11 +46,22 @@ namespace HospitalManagementSystem.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, AppointmentDTO appointmentDTO)
         {
-            var Appointment = await _service.GetById(id);
-            if (Appointment == null)
+            var appointment = await _service.GetById(id);
+            if (appointment == null)
                 return NotFound("Invalid Appointment ID");
             await _service.Update(id, appointmentDTO);
             return Ok("Appointment Updated Successfully");
+        }
+
+        [Authorize(Roles = "Admin,Doctor,Reception")]
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> Patch(int id, AppointmentStatusDTO dto)
+        {
+            var appointment = await _service.GetById(id);
+            if (appointment == null)
+                return NotFound("Invalid Appointment ID");
+            await _service.Patch(id, dto);
+            return Ok("Appointment status updated");
         }
 
         [Authorize(Roles = "Admin")]

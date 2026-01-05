@@ -38,9 +38,14 @@ namespace HospitalManagementSystem.Infrastructure.Repository
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task Patch(Appointment appointment)
+        {
+            _dbContext.Appointments.Update(appointment);
+            await _dbContext.SaveChangesAsync();
+        }
         public async Task Delete(int id)
         {
-            var appointment = await _dbContext.Appointments.IgnoreQueryFilters().FirstOrDefaultAsync(d => d.Id == id);
+            var appointment = await _dbContext.Appointments.FirstOrDefaultAsync(d => d.Id == id);
             if (appointment is null) return;
             appointment.IsDeleted = true;
             await _dbContext.SaveChangesAsync();

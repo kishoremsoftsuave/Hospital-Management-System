@@ -12,6 +12,7 @@ namespace HospitalManagementSystem.Application.Interfaces
         Task<Appointment?> GetById(int id);
         Task Create(Appointment appointment);
         Task Update(Appointment appointment);
+        Task Patch(Appointment appointment);
         Task Delete(int id);
     }
 }

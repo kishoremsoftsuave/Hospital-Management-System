@@ -179,7 +179,7 @@ namespace HospitalManagementSystem.Infrastructure.Migrations
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
-
+                        
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")

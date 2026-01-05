@@ -1,4 +1,5 @@
-﻿using HospitalManagementSystem.Domain.Entities;
+﻿using HospitalManagementSystem.Application.DTO;
+using HospitalManagementSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;

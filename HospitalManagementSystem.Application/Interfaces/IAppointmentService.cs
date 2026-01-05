@@ -11,6 +11,7 @@ namespace HospitalManagementSystem.Application.Interfaces
         Task<AppointmentDTO> GetById(int id);
         Task Create(AppointmentDTO appointmentDTO);
         Task Update(int id, AppointmentDTO appointmentDTO);
+        Task Patch(int id, AppointmentStatusDTO appointmentDTO);
         Task Delete(int id);
     }
 }

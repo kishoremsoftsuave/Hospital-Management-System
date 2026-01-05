@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HospitalManagementSystem.Application.DTO;
 using HospitalManagementSystem.Application.Interfaces;
+using HospitalManagementSystem.Domain;
 using HospitalManagementSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,13 @@ namespace HospitalManagementSystem.Application.Services
             await _repo.Update(appointment);
         }
 
+        public async Task Patch(int id, AppointmentStatusDTO appointmentDTO)
+        {
+            var appointment = await _repo.GetById(id);
+            if (appointment == null) return;
+            appointment.Status = appointmentDTO.Status;
+            await _repo.Patch(appointment);
+        }
         public async Task Delete(int id)
         {
             await _repo.Delete(id);

@@ -22,4 +22,8 @@
 		<ProjectReference Include="..\HospitalManagementSystem.Infrastructure\HospitalManagementSystem.Infrastructure.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Controllers\ElasticSearch\" />
+	</ItemGroup>
+
 </Project>

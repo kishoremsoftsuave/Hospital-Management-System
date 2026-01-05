@@ -12,4 +12,8 @@ namespace HospitalManagementSystem.Application.DTO
         public int DoctorId { get; set; }
         public AppointmentStatus Status { get; set; }
     }
+    public class AppointmentStatusDTO
+    {
+        public AppointmentStatus Status { get; set; }
+    }
 }
