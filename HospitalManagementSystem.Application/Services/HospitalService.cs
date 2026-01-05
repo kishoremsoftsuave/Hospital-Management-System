@@ -10,9 +10,9 @@ namespace HospitalManagementSystem.Application.Services
 {
     public class HospitalService : IHospitalService
     {
-        private readonly IHospitalRepositoryElastic _repo;
+        private readonly IHospitalRepository _repo;
         private readonly IMapper _mapper;
-        public HospitalService(IHospitalRepositoryElastic repo, IMapper mapper)
+        public HospitalService(IHospitalRepository repo, IMapper mapper)
         {
             _repo = repo;
             _mapper = mapper;

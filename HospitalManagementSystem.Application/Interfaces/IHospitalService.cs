@@ -13,12 +13,4 @@ namespace HospitalManagementSystem.Application.Interfaces
         Task Update(int id, HospitalDTO hospitalDTO);  
         Task Delete(int id);
     }
-    public interface IHospitalService
-    {
-        Task<List<HospitalDetailDTO>> GetAll();
-        Task<HospitalDetailDTO> GetById(int id);
-        Task Create(HospitalDTO hospitalDTO);
-        Task Update(int id, HospitalDTO hospitalDTO);
-        Task Delete(int id);
-    }
 }

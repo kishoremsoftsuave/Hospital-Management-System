@@ -12,9 +12,9 @@ namespace HospitalManagementSystem.Application.Services
     public class DoctorService : IDoctorService
     {
         private readonly IDoctorRepository _repo;
-        private readonly IHospitalRepositoryElastic _hospitalRepo;
+        private readonly IHospitalRepository _hospitalRepo;
         private readonly IMapper _mapper;
-        public DoctorService(IDoctorRepository repo, IMapper mapper, IHospitalRepositoryElastic hospitalRepo)
+        public DoctorService(IDoctorRepository repo, IMapper mapper, IHospitalRepository hospitalRepo)
         {
             _repo = repo;
             _mapper = mapper;
