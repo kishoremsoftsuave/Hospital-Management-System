@@ -1,6 +1,8 @@
 ﻿using HospitalManagementSystem.Application.DTO;
 using HospitalManagementSystem.Domain.Entities;
 using AutoMapper;
+using HospitalManagementSystem.Domain.Entities.ElasticSearch;
+using HospitalManagementSystem.Application.DTO.ElasticSearch;
 
 namespace HospitalManagementSystem.Application.AutoMapping
 {
@@ -22,6 +24,9 @@ namespace HospitalManagementSystem.Application.AutoMapping
                 .ForMember(d => d.DoctorName, o => o.MapFrom(s => s.Name));
             CreateMap<Hospital, HospitalDetailDTO>()
                 .ForMember(d => d.HospitalName, o => o.MapFrom(s => s.Name));
+
+            // Elastic Search Mappings
+            CreateMap<ElasticHospital, ElasticHospitalDetailDTO>().ReverseMap();
 
         }
     }

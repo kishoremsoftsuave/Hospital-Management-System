@@ -6,8 +6,8 @@ namespace HospitalManagementSystem.Application.DTO
 {
     public class HospitalDTO
     {
-        public required string Name { get; set; }
-        public required string Location { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
     }
     public class HospitalDetailDTO
     {

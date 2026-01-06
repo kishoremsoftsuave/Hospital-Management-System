@@ -32,7 +32,7 @@ namespace HospitalManagementSystem.Application.Services
         public async Task<AppointmentDTO> GetById(int id)
         {
             var appointment = await _repo.GetById(id);
-            if(appointment == null)
+            if(appointment is null)
                 throw new KeyNotFoundException("Appointment not found");
             return _mapper.Map<AppointmentDTO>(appointment);
         }
@@ -40,7 +40,7 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Create(AppointmentDTO appointmentDTO)
         {
             var doctor = await _doctorRepo.GetById(appointmentDTO.DoctorId);
-            if (doctor == null)
+            if (doctor is null)
                 throw new KeyNotFoundException("Doctor not found");
 
             if (doctor.IsDeleted)
@@ -48,7 +48,7 @@ namespace HospitalManagementSystem.Application.Services
 
             // Validate Patient
             var patient = await _patientRepo.GetById(appointmentDTO.PatientId);
-            if (patient == null)
+            if (patient is null)
                 throw new KeyNotFoundException("Patient not found");
 
             // Business rule example
@@ -62,11 +62,11 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Update(int id, AppointmentDTO appointmentDTO)
         {
             var appointment = await _repo.GetById(id);
-            if (appointment == null)
+            if (appointment is null)
                 throw new KeyNotFoundException("Appointment not found");
 
             var doctor = await _doctorRepo.GetById(appointmentDTO.DoctorId);
-            if (doctor == null)
+            if (doctor is null)
                 throw new KeyNotFoundException("Doctor not found");
 
             if (doctor.IsDeleted)
@@ -74,7 +74,7 @@ namespace HospitalManagementSystem.Application.Services
 
             // Validate Patient
             var patient = await _patientRepo.GetById(appointmentDTO.PatientId);
-            if (patient == null)
+            if (patient is null)
                 throw new KeyNotFoundException("Patient not found");
 
             // Business rule example
@@ -88,13 +88,16 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Patch(int id, AppointmentStatusDTO appointmentDTO)
         {
             var appointment = await _repo.GetById(id);
-            if (appointment == null)
+            if (appointment is null)
                 throw new KeyNotFoundException("Appointment not found");
             appointment.Status = appointmentDTO.Status;
             await _repo.Patch(appointment);
         }
         public async Task Delete(int id)
         {
+            var appointment = await _repo.GetById(id);
+            if (appointment is null)
+                throw new KeyNotFoundException("Appointment not found");
             await _repo.Delete(id);
         }
     }
