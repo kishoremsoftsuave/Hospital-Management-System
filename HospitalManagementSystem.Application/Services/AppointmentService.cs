@@ -6,6 +6,7 @@ using HospitalManagementSystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HospitalManagementSystem.Application.Services
 {
@@ -31,6 +32,8 @@ namespace HospitalManagementSystem.Application.Services
         public async Task<AppointmentDTO> GetById(int id)
         {
             var appointment = await _repo.GetById(id);
+            if(appointment == null)
+                throw new KeyNotFoundException("Appointment not found");
             return _mapper.Map<AppointmentDTO>(appointment);
         }
 
@@ -38,19 +41,19 @@ namespace HospitalManagementSystem.Application.Services
         {
             var doctor = await _doctorRepo.GetById(appointmentDTO.DoctorId);
             if (doctor == null)
-                throw new Exception("Doctor not found");
+                throw new KeyNotFoundException("Doctor not found");
 
             if (doctor.IsDeleted)
-                throw new Exception("Doctor is deleted");
+                throw new InvalidOperationException("Doctor is deleted");
 
             // Validate Patient
             var patient = await _patientRepo.GetById(appointmentDTO.PatientId);
             if (patient == null)
-                throw new Exception("Patient not found");
+                throw new KeyNotFoundException("Patient not found");
 
             // Business rule example
             if (appointmentDTO.AppointmentDate < DateOnly.FromDateTime(DateTime.Today))
-                throw new Exception("Appointment date cannot be in the past");
+                throw new ArgumentException("Appointment date cannot be in the past");
 
             var appointment = _mapper.Map<Appointment>(appointmentDTO);
             await _repo.Create(appointment);
@@ -59,23 +62,24 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Update(int id, AppointmentDTO appointmentDTO)
         {
             var appointment = await _repo.GetById(id);
-            if (appointment == null) return;
+            if (appointment == null)
+                throw new KeyNotFoundException("Appointment not found");
 
             var doctor = await _doctorRepo.GetById(appointmentDTO.DoctorId);
             if (doctor == null)
-                throw new Exception("Doctor not found");
+                throw new KeyNotFoundException("Doctor not found");
 
             if (doctor.IsDeleted)
-                throw new Exception("Doctor is deleted");
+                throw new InvalidOperationException("Doctor is deleted");
 
             // Validate Patient
             var patient = await _patientRepo.GetById(appointmentDTO.PatientId);
             if (patient == null)
-                throw new Exception("Patient not found");
+                throw new KeyNotFoundException("Patient not found");
 
             // Business rule example
             if (appointmentDTO.AppointmentDate < DateOnly.FromDateTime(DateTime.Today))
-                throw new Exception("Appointment date cannot be in the past");
+                throw new ArgumentException("Appointment date cannot be in the past");
 
             _mapper.Map(appointmentDTO, appointment);
             await _repo.Update(appointment);
@@ -84,7 +88,8 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Patch(int id, AppointmentStatusDTO appointmentDTO)
         {
             var appointment = await _repo.GetById(id);
-            if (appointment == null) return;
+            if (appointment == null)
+                throw new KeyNotFoundException("Appointment not found");
             appointment.Status = appointmentDTO.Status;
             await _repo.Patch(appointment);
         }

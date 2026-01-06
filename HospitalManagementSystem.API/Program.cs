@@ -1,11 +1,15 @@
-using HospitalManagementSystem.Application.Configuratioon;
+using Elastic.Clients.Elasticsearch;
+using Elastic.Transport;
+using HospitalManagementSystem.API.Extension;
 using HospitalManagementSystem.Application.AutoMapping;
+using HospitalManagementSystem.Application.Configuratioon;
 using HospitalManagementSystem.Application.Interfaces;
 using HospitalManagementSystem.Application.Services;
 using HospitalManagementSystem.Infrastructure.Data;
 using HospitalManagementSystem.Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -77,6 +81,37 @@ builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("Jwt")
 );
 
+// Elasticsearch Client
+                                //builder.Services.AddSingleton(_ =>
+                                //{
+                                //    var settings = new ElasticsearchClientSettings(
+                                //        new Uri(builder.Configuration["Elasticsearch:Url"])
+                                //    )
+                                //    .Authentication(new BasicAuthentication(
+                                //        builder.Configuration["Elasticsearch:Username"],
+                                //        builder.Configuration["Elasticsearch:Password"]
+                                //    ))
+                                //    .ServerCertificateValidationCallback((_, _, _, _) => true);
+
+                                //    return new ElasticsearchClient(settings);
+                                //});
+
+builder.Services.Configure<ElasticsearchSettings>(
+    builder.Configuration.GetSection("Elasticsearch")
+);
+
+builder.Services.AddSingleton(sp =>
+{
+    var options = sp.GetRequiredService<IOptions<ElasticsearchSettings>>().Value;
+
+    var settings = new ElasticsearchClientSettings(new Uri(options.Url))
+        .Authentication(new BasicAuthentication(options.Username, options.Password))
+        .ServerCertificateValidationCallback((_, _, _, _) => true);
+
+    return new ElasticsearchClient(settings);
+});
+
+
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMap).Assembly);
 
@@ -100,6 +135,9 @@ builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
 // Build app
 var app = builder.Build();
 
+// Global Exception Middleware
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
 // Configure middleware
 if (app.Environment.IsDevelopment())
 {
@@ -114,5 +152,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();   // MUST come before authorization
 app.UseAuthorization();
 
+// Map controllers
 app.MapControllers();
 app.Run();

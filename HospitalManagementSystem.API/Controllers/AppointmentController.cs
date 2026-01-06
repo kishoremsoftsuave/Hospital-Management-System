@@ -29,8 +29,6 @@ namespace HospitalManagementSystem.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var Appointment = await _service.GetById(id);
-            if (Appointment == null)
-                return NotFound("Appointment Not Found");
             return Ok(Appointment);
         }
 
@@ -46,31 +44,23 @@ namespace HospitalManagementSystem.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, AppointmentDTO appointmentDTO)
         {
-            var appointment = await _service.GetById(id);
-            if (appointment == null)
-                return NotFound("Invalid Appointment ID");
             await _service.Update(id, appointmentDTO);
             return Ok("Appointment Updated Successfully");
         }
 
         [Authorize(Roles = "Admin,Doctor,Reception")]
-        [HttpPatch("{id}")]
+        [HttpPatch("{id}/status")]
         public async Task<IActionResult> Patch(int id, AppointmentStatusDTO dto)
         {
-            var appointment = await _service.GetById(id);
-            if (appointment == null)
-                return NotFound("Invalid Appointment ID");
             await _service.Patch(id, dto);
             return Ok("Appointment status updated");
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete]
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var Appointment = await _service.GetById(id);
-            if (Appointment == null)
-                return NotFound("Invalid Appointment ID");
             await _service.Delete(id);
             return Ok("Appointment Deleted Successfully");
         }
