@@ -29,8 +29,6 @@ namespace HospitalManagementSystem.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var patient = await _service.GetById(id);
-            if (patient == null)
-                return NotFound("Invalid Patient Id");
             return Ok(patient);
         }
         [Authorize(Roles = "Admin,Doctor,Receptionist")]
@@ -45,9 +43,6 @@ namespace HospitalManagementSystem.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(int id, PatientDTO patientDTO)
         {
-            var patient = await _service.GetById(id);
-            if (patient == null)
-                return NotFound("Invalid Patient Id");
             await _service.Update(id, patientDTO);
             return Ok("Patient Updated Successfully");
         }
@@ -56,9 +51,6 @@ namespace HospitalManagementSystem.API.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var patient = await _service.GetById(id);
-            if (patient == null)
-                return NotFound("Invalid Patient Id");
             await _service.Delete(id);
             return Ok("Patient Deleted Successfully");
         }

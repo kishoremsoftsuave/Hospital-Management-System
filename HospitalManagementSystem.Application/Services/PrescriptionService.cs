@@ -30,15 +30,19 @@ namespace HospitalManagementSystem.Application.Services
         public async Task<PrescriptionDTO> GetById(int id)
         {
             var prescription = await _repo.GetById(id);
+            if (prescription == null)
+                throw new KeyNotFoundException("Prescription not found.");
             return _mapper.Map<PrescriptionDTO>(prescription);
         }
 
         public async Task Create(PrescriptionDTO prescriptionDTO)
         {
             var doctor = await _doctorRepo.GetById(prescriptionDTO.DoctorId);
-            if (doctor == null) throw new Exception("Doctor not found.");
+            if (doctor is null)
+                throw new KeyNotFoundException("Doctor not found.");
             var patient = await _patientRepo.GetById(prescriptionDTO.PatientId);
-            if (patient == null) throw new Exception("Patient not found.");
+            if (patient is null)
+                throw new KeyNotFoundException("Patient not found.");
             var prescription = _mapper.Map<Prescription>(prescriptionDTO);
             await _repo.Create(prescription);
         }
@@ -46,11 +50,14 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Update(int id, PrescriptionDTO prescriptionDTO)
         {
             var prescription = await _repo.GetById(id);
-            if (prescription == null) return;
+            if (prescription is null)
+                throw new KeyNotFoundException("Prescription not found.");
             var doctor = await _doctorRepo.GetById(prescriptionDTO.DoctorId);
-            if (doctor == null) throw new Exception("Doctor not found.");
+            if (doctor == null) 
+                throw new KeyNotFoundException("Doctor not found.");
             var patient = await _patientRepo.GetById(prescriptionDTO.PatientId);
-            if (patient == null) throw new Exception("Patient not found.");
+            if (patient is null) 
+                throw new KeyNotFoundException("Patient not found.");
             _mapper.Map(prescriptionDTO, prescription);
             await _repo.Update(prescription);
         }
@@ -58,8 +65,10 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Delete(int id)
         {
             var prescription = await _repo.GetById(id);
-            if (prescription is not null)
-                if (prescription.IsDeleted) throw new Exception("Prescription is already deleted.");
+            if (prescription is null)
+                throw new KeyNotFoundException("Prescription not found.");
+            if (prescription.IsDeleted)
+                    throw new InvalidOperationException("Prescription is already deleted.");
             await _repo.Delete(id);
         }
     }

@@ -28,14 +28,16 @@ namespace HospitalManagementSystem.Application.Services
         public async Task<MedicalRecordDTO> GetById(int id)
         {
             var medicalRecord = await _repo.GetById(id);
+            if (medicalRecord is null)
+                throw new KeyNotFoundException("MedicalRecord not found");
             return _mapper.Map<MedicalRecordDTO>(medicalRecord);
         }
 
         public async Task Create(MedicalRecordDTO medicalRecordDTO)
         {
             var patientExists = await _patientRepo.GetById(medicalRecordDTO.PatientId);
-            if (patientExists == null)
-                throw new Exception("Patient does not exist.");
+            if (patientExists is null)
+                throw new KeyNotFoundException("Patient does not exist.");
             var medicalRecord = _mapper.Map<MedicalRecord>(medicalRecordDTO);
             await _repo.Create(medicalRecord);
         }
@@ -43,10 +45,11 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Update(int id, MedicalRecordDTO medicalRecordDTO)
         {
             var medicalRecord = await _repo.GetById(id);
-            if (medicalRecord == null) return;
+            if (medicalRecord is null)
+                throw new KeyNotFoundException("MedicalRecord not found");
             var patientExists = await _patientRepo.GetById(medicalRecordDTO.PatientId);
-            if (patientExists == null)
-                throw new Exception("Patient does not exist.");
+            if (patientExists is null)
+                throw new KeyNotFoundException("Patient does not exist.");
             _mapper.Map(medicalRecordDTO, medicalRecord);
             await _repo.Update(medicalRecord);
         }
@@ -54,8 +57,10 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Delete(int id)
         {
             var medical = await _repo.GetById(id);
-            if (medical is not null)
-                if (medical.IsDeleted) throw new Exception("MedicalRecord is already deleted.");
+            if (medical is null)
+                throw new KeyNotFoundException("MedicalRecord not found");
+            if (medical.IsDeleted)
+                throw new InvalidOperationException("MedicalRecord is already deleted.");
             await _repo.Delete(id);
         }
     }

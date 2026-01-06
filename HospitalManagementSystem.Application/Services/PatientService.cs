@@ -29,13 +29,16 @@ namespace HospitalManagementSystem.Application.Services
         public async Task<PatientDTO> GetById(int id)
         {
             var patient = await _repo.GetById(id);
+            if (patient is null)
+                throw new KeyNotFoundException("Patient not found.");
             return _mapper.Map<PatientDTO>(patient);
         }
 
         public async Task Create(PatientDTO patientDTO)
         {
             var doctor = await _doctorRepo.GetById(patientDTO.DoctorId);
-            if (doctor == null) throw new Exception("Doctor not found.");
+            if (doctor is null) 
+                throw new KeyNotFoundException("Doctor not found.");
             var patient = _mapper.Map<Patient>(patientDTO);
             await _repo.Create(patient);
         }
@@ -43,9 +46,11 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Update(int id, PatientDTO patientDTO)
         {
             var patient = await _repo.GetById(id);
-            if (patient == null) return;
+            if (patient is null)
+                throw new KeyNotFoundException("Patient not found.");
             var doctor = await _doctorRepo.GetById(patientDTO.DoctorId);
-            if (doctor == null) throw new Exception("Doctor not found.");
+            if (doctor is null)
+                throw new KeyNotFoundException("Doctor not found.");
             _mapper.Map(patientDTO, patient);
             await _repo.Update(patient);
         }
@@ -53,8 +58,10 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Delete(int id)
         {
             var patient = await _repo.GetById(id);
-            if (patient is not null)
-                if (patient.IsDeleted) throw new Exception("Patient is already deleted.");
+            if (patient is null)
+                throw new KeyNotFoundException("Patient not found.");
+            if (patient.IsDeleted)
+               throw new InvalidOperationException("Patient is already deleted.");
             await _repo.Delete(id);
         }
     }

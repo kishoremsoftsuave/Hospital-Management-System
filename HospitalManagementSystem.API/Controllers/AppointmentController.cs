@@ -57,7 +57,6 @@ namespace HospitalManagementSystem.API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -31,14 +31,16 @@ namespace HospitalManagementSystem.Application.Services
         public async Task<DoctorDetailDTO> GetById(int id)
         {
             var doctor = await _repo.GetById(id);
+            if (doctor is null)
+                throw new KeyNotFoundException("Doctor not found");
             return _mapper.Map<DoctorDetailDTO>(doctor);
         }
 
         public async Task Create(DoctorDTO doctorDTO)
         {
             var hospital = await _hospitalRepo.GetById(doctorDTO.HospitalId);
-            if (hospital == null)
-                throw new Exception("Hospital not found");
+            if (hospital is null)
+                throw new KeyNotFoundException("Hospital not found");
             var doctor = _mapper.Map<Doctor>(doctorDTO);
             await _repo.Create(doctor);
         }
@@ -46,10 +48,11 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Update(int id, DoctorDTO doctorDTO)
         {
             var doctor = await _repo.GetById(id);
-            if (doctor is null) return;
+            if (doctor is null)
+                throw new KeyNotFoundException("Doctor not found");
             var hospital = await _hospitalRepo.GetById(doctorDTO.HospitalId);
-            if (hospital == null)
-                throw new Exception("Hospital not found");
+            if (hospital is null)
+                throw new KeyNotFoundException("Hospital not found");
             _mapper.Map(doctorDTO, doctor);
             await _repo.Update(doctor);
         }
@@ -57,8 +60,10 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Delete(int id)
         {
             var doctor = await _repo.GetById(id);
-            if (doctor is not null)
-                if (doctor.IsDeleted) throw new Exception("Doctor is already deleted.");
+            if (doctor is null)
+                throw new KeyNotFoundException("Doctor not found");
+            if (doctor.IsDeleted)
+                    throw new InvalidOperationException("Doctor is already deleted.");
             await _repo.Delete(id);
         }
     }

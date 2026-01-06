@@ -27,6 +27,8 @@ namespace HospitalManagementSystem.Application.Services
         public async Task<HospitalDetailDTO> GetById(int id)
         {
             var hospital = await _repo.GetById(id);
+            if (hospital is null)
+                throw new KeyNotFoundException("Hospital not found");
             return _mapper.Map<HospitalDetailDTO>(hospital);
         }
         public async Task Create(HospitalDTO hospitalDTO)
@@ -38,18 +40,19 @@ namespace HospitalManagementSystem.Application.Services
         public async Task Update(int id, HospitalDTO hospitalDTO)
         {
             var hospital = await _repo.GetById(id);
-            if (hospital == null) return;
-            hospital.Name = hospitalDTO.Name;
-            hospital.Location = hospitalDTO.Location;
-
+            if (hospital == null)
+                throw new KeyNotFoundException("Hospital not found");
+            _mapper.Map(hospitalDTO, hospital);
             await _repo.Update(hospital);
         }
         
         public async Task Delete(int id)
         {
             var hospital = await _repo.GetById(id);
-            if (hospital is not null)
-                if (hospital.IsDeleted) throw new Exception("Hospital is already deleted.");
+            if (hospital is null)
+                throw new KeyNotFoundException("Hospital not found");
+            if (hospital.IsDeleted) 
+                throw new InvalidOperationException("Hospital is already deleted.");
             await _repo.Delete(id);
         }   
     }
