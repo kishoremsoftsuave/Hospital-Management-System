@@ -1,7 +1,8 @@
 ﻿using System.Net;
 using System.Text.Json;
 
-namespace HospitalManagementSystem.API.Extension
+namespace HospitalManagementSystem.API.Exceptions
+
 {
     public class GlobalExceptionMiddleware
     {

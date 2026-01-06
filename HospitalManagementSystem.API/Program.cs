@@ -1,6 +1,6 @@
 using Elastic.Clients.Elasticsearch;
 using Elastic.Transport;
-using HospitalManagementSystem.API.Extension;
+using HospitalManagementSystem.API.Exceptions;
 using HospitalManagementSystem.Application.AutoMapping;
 using HospitalManagementSystem.Application.Configuratioon;
 using HospitalManagementSystem.Application.Interfaces;
