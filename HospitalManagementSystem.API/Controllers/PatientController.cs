@@ -16,7 +16,7 @@ namespace HospitalManagementSystem.API.Controllers
             _service = service;
         }
 
-        [Authorize(Roles = "Admin,Doctor,Receptionist")]
+        [Authorize(Roles = "Admin,Doctor,Reception")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -24,14 +24,14 @@ namespace HospitalManagementSystem.API.Controllers
 
         }
 
-        [Authorize(Roles = "Admin,Doctor,Receptionist,Patient")]
+        [Authorize(Roles = "Admin,Doctor,Reception,Patient")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var patient = await _service.GetById(id);
             return Ok(patient);
         }
-        [Authorize(Roles = "Admin,Doctor,Receptionist")]
+        [Authorize(Roles = "Admin,Doctor,Reception")]
         [HttpPost]
         public async Task<IActionResult> Create(PatientDTO patientDTO)
         {
@@ -39,7 +39,7 @@ namespace HospitalManagementSystem.API.Controllers
             return Ok("Patient Created Successfully");
         }
 
-        [Authorize(Roles = "Admin,Doctor,Receptionist")]
+        [Authorize(Roles = "Admin,Doctor,Reception")]
         [HttpPut]
         public async Task<IActionResult> Update(int id, PatientDTO patientDTO)
         {
