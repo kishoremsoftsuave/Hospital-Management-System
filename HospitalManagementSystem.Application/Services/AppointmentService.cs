@@ -39,21 +39,21 @@ namespace HospitalManagementSystem.Application.Services
 
         public async Task Create(AppointmentDTO appointmentDTO)
         {
-            var doctor = await _doctorRepo.GetById(appointmentDTO.DoctorId);
-            if (doctor is null)
-                throw new KeyNotFoundException("Doctor not found");
-
-            if (doctor.IsDeleted)
-                throw new InvalidOperationException("Doctor is deleted");
+            // Business rule example
+            if (appointmentDTO.AppointmentDate < DateOnly.FromDateTime(DateTime.Today))
+                throw new ArgumentException("Appointment date cannot be in the past");
 
             // Validate Patient
             var patient = await _patientRepo.GetById(appointmentDTO.PatientId);
             if (patient is null)
                 throw new KeyNotFoundException("Patient not found");
 
-            // Business rule example
-            if (appointmentDTO.AppointmentDate < DateOnly.FromDateTime(DateTime.Today))
-                throw new ArgumentException("Appointment date cannot be in the past");
+            var doctor = await _doctorRepo.GetById(appointmentDTO.DoctorId);
+            if (doctor is null)
+                throw new KeyNotFoundException("Doctor not found");
+
+            if (doctor.IsDeleted)
+                throw new InvalidOperationException("Doctor is deleted");
 
             var appointment = _mapper.Map<Appointment>(appointmentDTO);
             await _repo.Create(appointment);

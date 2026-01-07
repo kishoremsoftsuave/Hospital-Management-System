@@ -110,7 +110,7 @@ builder.Services.AddSingleton(sp =>
 
     var settings = new ElasticsearchClientSettings(new Uri(options.Uri))
         .Authentication(new BasicAuthentication(options.Username, options.Password))
-        .ServerCertificateValidationCallback((_, _, _, _) => true);
+        .ServerCertificateValidationCallback((sender, cert, chain, errors) => true);
 
     return new ElasticsearchClient(settings);
 });
@@ -160,8 +160,6 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine("Failed to create Elasticsearch indices on startup.");
     }
 }
-
-app.Run();
 
 // Configure middleware
 if (app.Environment.IsDevelopment())

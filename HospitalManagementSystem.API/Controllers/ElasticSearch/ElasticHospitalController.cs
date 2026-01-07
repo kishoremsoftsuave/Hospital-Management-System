@@ -23,28 +23,28 @@ namespace HospitalManagementSystem.API.Controllers.ElasticSearch
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var hospital = await _service.GetById(id);
             return Ok(hospital);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ElasticHospitalDTO hospitaldto)
+        public async Task<IActionResult> Create(ElasticHospitalCreateDTO hospitaldto)
         {
             await _service.Create(hospitaldto);
             return Ok("Elastic Hospital Created Successfully");
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, ElasticHospitalDTO hospitaldto)
+        public async Task<IActionResult> Update(Guid id, ElasticHospitalDetailDTO hospitaldto)
         {
             await _service.Update(id, hospitaldto);
             return Ok("Elastic Hospital Updated Successfully");
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             await _service.Delete(id);
             return Ok("Elastic Hospital Deleted Successfully");

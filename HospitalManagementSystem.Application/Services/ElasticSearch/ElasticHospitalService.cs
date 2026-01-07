@@ -18,22 +18,22 @@ namespace HospitalManagementSystem.Application.Services.ElasticSearch
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ElasticHospitalDTO>> GetAll()
+        public async Task<IEnumerable<ElasticHospitalDetailDTO>> GetAll()
         {
             return await _repo.GetAll();
         }
 
-        public async Task<ElasticHospitalDTO?> GetById(int id)
+        public async Task<ElasticHospitalDetailDTO?> GetById(Guid id)
         {
             return await _repo.GetById(id);
         }
 
-        public async Task Create(ElasticHospitalDTO hospitaldto)
+        public async Task Create(ElasticHospitalCreateDTO hospitaldto)
         {
             await _repo.Create(hospitaldto);
         }
 
-        public async Task Update(int id, ElasticHospitalDTO hospitaldto)
+        public async Task Update(Guid id, ElasticHospitalDetailDTO hospitaldto)
         {
             var hospital = await _repo.GetById(id);
             if(hospital is null) 
@@ -41,7 +41,7 @@ namespace HospitalManagementSystem.Application.Services.ElasticSearch
             await _repo.Update(id, hospitaldto);
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(Guid id)
         {
             var hospital = await _repo.GetById(id);
             if (hospital is null)

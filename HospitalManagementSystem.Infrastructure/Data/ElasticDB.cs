@@ -77,7 +77,10 @@ namespace HospitalManagementSystem.Infrastructure.ElasticSearch
                     } )
                 )
             );
-
+            if (!response.IsValidResponse)
+            {
+                _logger.LogError("Elasticsearch index creation failed: {Debug}", response.DebugInformation);
+            }
             return response.IsValidResponse;
         }
 
