@@ -1,17 +1,20 @@
 ﻿using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.Mapping;
 using HospitalManagementSystem.Domain.Entities.ElasticSearch;
+using Microsoft.Extensions.Logging;
 
 namespace HospitalManagementSystem.Infrastructure.ElasticSearch
 {
     public class ElasticDB
     {
         private readonly ElasticsearchClient _client;
+        private readonly ILogger<ElasticDB> _logger;
         private const string IndexName = "hospitals";
 
-        public ElasticDB(ElasticsearchClient client)
+        public ElasticDB(ElasticsearchClient client , ILogger<ElasticDB> logger)
         {
             _client = client;
+            _logger = logger;
         }
         public async Task<bool> CreateAllIndicesAsync()
         {
@@ -20,17 +23,20 @@ namespace HospitalManagementSystem.Infrastructure.ElasticSearch
                 var hospital = await CreateHospitalIndexAsync();
                 return hospital;
             }
-            catch (Exception)
-            {
-                return false;
+            catch (Exception ex)
+            { 
+            _logger.LogError(ex, "Error creating indices");
+            return false;
             }   
         }
         public async Task<bool> CreateHospitalIndexAsync()
         {
             var existsResponse = await _client.Indices.ExistsAsync(IndexName);
             if (existsResponse.Exists)
+            {
+                _logger.LogInformation("Hospital index already exists");
                 return true;
-
+            }
             var response = await _client.Indices.CreateAsync(IndexName, c => c
                 .Settings(s => s
                     .NumberOfShards(1)
@@ -75,14 +81,54 @@ namespace HospitalManagementSystem.Infrastructure.ElasticSearch
             return response.IsValidResponse;
         }
 
-        public async Task<bool> DeleteHospitalIndexAsync()
+        public async Task<bool> DeleteAllIndiciesAsync()
         {
-            var existsResponse = await _client.Indices.ExistsAsync(IndexName);
-            if (existsResponse.Exists)
-                return true;
+            try
+            {
+                var existsResponse = await _client.Indices.ExistsAsync(IndexName);
+                if (!existsResponse.Exists)
+                {
+                    _logger.LogInformation(" Index {Index} does not exist", IndexName);
+                    return true;
+                }
+                var response = await _client.Indices.DeleteAsync(IndexName);
+                if (response.IsValidResponse)
+                {
+                    _logger.LogInformation(" Index {Index} deleted successfully", IndexName);
+                    return true;
+                }
+                else
+                {
+                     _logger.LogError(" Failed to delete index {Index}: {Error}", IndexName, response.DebugInformation);
+                     return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting index {Index}", IndexName);
+                return false;
+            }
+        }
+        public async Task<bool> DeleteHospitalAsync(int id)
+        {
+            try
+            {
+                var response = await _client.DeleteAsync<ElasticHospital>(id.ToString(), d => d.Index(IndexName));
 
-            var response = await _client.Indices.DeleteAsync(IndexName);
-            return response.IsValidResponse;
+                if (response.IsValidResponse)
+                {
+                    _logger.LogInformation("Hospital document with ID {Id} deleted successfully", id);
+                    return true;
+                }
+
+                _logger.LogError("Failed to delete hospital document with ID {Id}: {Error}", id, response.DebugInformation);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting hospital document with ID {Id}", id);
+                return false;
+            }
         }
     }
 }

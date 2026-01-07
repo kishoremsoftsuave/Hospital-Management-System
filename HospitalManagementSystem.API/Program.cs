@@ -108,7 +108,7 @@ builder.Services.AddSingleton(sp =>
 {
     var options = sp.GetRequiredService<IOptions<ElasticsearchSettings>>().Value;
 
-    var settings = new ElasticsearchClientSettings(new Uri(options.Url))
+    var settings = new ElasticsearchClientSettings(new Uri(options.Uri))
         .Authentication(new BasicAuthentication(options.Username, options.Password))
         .ServerCertificateValidationCallback((_, _, _, _) => true);
 
@@ -117,6 +117,7 @@ builder.Services.AddSingleton(sp =>
 
 // Elasticsearch DB
 builder.Services.AddSingleton<ElasticDB>();
+
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMap).Assembly);
 
@@ -144,6 +145,23 @@ var app = builder.Build();
 
 // Global Exception Middleware
 app.UseMiddleware<GlobalExceptionMiddleware>();
+
+// Create Elasticsearch Indices on startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ElasticDB>();
+    var result = await db.CreateAllIndicesAsync();
+    if (result)
+    {
+        Console.WriteLine("Elasticsearch indices created successfully on startup.");
+    }
+    else
+    {
+        Console.WriteLine("Failed to create Elasticsearch indices on startup.");
+    }
+}
+
+app.Run();
 
 // Configure middleware
 if (app.Environment.IsDevelopment())
