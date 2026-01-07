@@ -43,6 +43,9 @@ namespace HospitalManagementSystem.Application.Services.ElasticSearch
 
         public async Task Delete(int id)
         {
+            var hospital = await _repo.GetById(id);
+            if (hospital is null)
+                throw new KeyNotFoundException($"Hospital with id {id} not found.");
             await _repo.Delete(id);
         }
     }

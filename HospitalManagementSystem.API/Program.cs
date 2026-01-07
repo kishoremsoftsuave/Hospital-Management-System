@@ -4,9 +4,13 @@ using HospitalManagementSystem.API.Exceptions;
 using HospitalManagementSystem.Application.AutoMapping;
 using HospitalManagementSystem.Application.Configuratioon;
 using HospitalManagementSystem.Application.Interfaces;
+using HospitalManagementSystem.Application.Interfaces.ElasticSearch;
 using HospitalManagementSystem.Application.Services;
+using HospitalManagementSystem.Application.Services.ElasticSearch;
 using HospitalManagementSystem.Infrastructure.Data;
+using HospitalManagementSystem.Infrastructure.ElasticSearch;
 using HospitalManagementSystem.Infrastructure.Repository;
+using HospitalManagementSystem.Infrastructure.Repository.ElasticSearch;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -111,7 +115,8 @@ builder.Services.AddSingleton(sp =>
     return new ElasticsearchClient(settings);
 });
 
-
+// Elasticsearch DB
+builder.Services.AddSingleton<ElasticDB>();
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMap).Assembly);
 
@@ -123,6 +128,7 @@ builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
 builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+builder.Services.AddScoped<IElasticHospitalService, ElasticHospitalService>();
 
 // Repositories
 builder.Services.AddScoped<IHospitalRepository, HospitalRepository>();
@@ -131,6 +137,7 @@ builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IMedicalRecordRepository, MedicalRecordsRepository>();
 builder.Services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+builder.Services.AddScoped<IElasticHospitalRepository, ElasticHospitalRepository>();    
 
 // Build app
 var app = builder.Build();
