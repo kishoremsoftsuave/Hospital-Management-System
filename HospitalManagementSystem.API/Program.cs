@@ -4,6 +4,7 @@ using HospitalManagementSystem.API.Exceptions;
 using HospitalManagementSystem.Application.AutoMapping;
 using HospitalManagementSystem.Application.Configuratioon;
 using HospitalManagementSystem.Application.Interfaces;
+using HospitalManagementSystem.Infrastructure.Injection;
 using HospitalManagementSystem.Application.Interfaces.ElasticSearch;
 using HospitalManagementSystem.Application.Services;
 using HospitalManagementSystem.Application.Services.ElasticSearch;
@@ -117,6 +118,9 @@ builder.Services.AddSingleton(sp =>
 
 // Elasticsearch DB
 builder.Services.AddSingleton<ElasticDB>();
+
+// Infrastructure
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMap).Assembly);

@@ -9,6 +9,7 @@
 	<ItemGroup>
 		<PackageReference Include="Elastic.Clients.Elasticsearch" Version="8.19.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.1" />
+		<PackageReference Include="Microsoft.Azure.Cosmos" Version="3.35.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
