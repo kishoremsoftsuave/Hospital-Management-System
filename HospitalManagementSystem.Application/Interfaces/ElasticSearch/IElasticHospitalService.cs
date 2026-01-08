@@ -10,8 +10,8 @@ namespace HospitalManagementSystem.Application.Interfaces.ElasticSearch
     {
         Task<IEnumerable<ElasticHospitalDetailDTO>> GetAll();
         Task<ElasticHospitalDetailDTO?> GetById(Guid id);
-        Task Create(ElasticHospitalCreateDTO hospitaldto);
-        Task Update(Guid id, ElasticHospitalDetailDTO hospitaldto);
+        Task<Guid> Create(ElasticHospitalCreateDTO hospitaldto);
+        Task Update(Guid id, ElasticHospitalUpdateDTO hospitaldto);
         Task Delete(Guid id);
     }
 }

@@ -20,26 +20,40 @@ namespace HospitalManagementSystem.Application.Services.ElasticSearch
 
         public async Task<IEnumerable<ElasticHospitalDetailDTO>> GetAll()
         {
-            return await _repo.GetAll();
+            var hospital = await _repo.GetAll();
+            return _mapper.Map<IEnumerable<ElasticHospitalDetailDTO>>(hospital);
         }
 
         public async Task<ElasticHospitalDetailDTO?> GetById(Guid id)
         {
-            return await _repo.GetById(id);
+            var hospital = await _repo.GetById(id);
+            if(hospital is null)
+                throw new KeyNotFoundException($"Hospital with id {id} not found.");
+            return _mapper.Map<ElasticHospitalDetailDTO>(hospital);
         }
 
-        public async Task Create(ElasticHospitalCreateDTO hospitaldto)
+        public async Task<Guid> Create(ElasticHospitalCreateDTO hospitaldto)
         {
-            await _repo.Create(hospitaldto);
+            var hospital = _mapper.Map<ElasticHospital>(hospitaldto);
+
+            // Generate GUID
+            hospital.Id = Guid.NewGuid();
+
+            // Save to repository
+            await _repo.Create(hospital);
+
+            return hospital.Id;
         }
 
-        public async Task Update(Guid id, ElasticHospitalDetailDTO hospitaldto)
+        public async Task Update(Guid id, ElasticHospitalUpdateDTO hospitaldto)
         {
             var hospital = await _repo.GetById(id);
-            if(hospital is null) 
+            if (hospital is null)
                 throw new KeyNotFoundException($"Hospital with id {id} not found.");
-            await _repo.Update(id, hospitaldto);
+            var updatedHospital = _mapper.Map(hospitaldto,hospital);
+            await _repo.Update(id, updatedHospital);
         }
+
 
         public async Task Delete(Guid id)
         {

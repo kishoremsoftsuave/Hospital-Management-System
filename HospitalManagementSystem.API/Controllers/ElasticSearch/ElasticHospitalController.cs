@@ -37,7 +37,7 @@ namespace HospitalManagementSystem.API.Controllers.ElasticSearch
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, ElasticHospitalDetailDTO hospitaldto)
+        public async Task<IActionResult> Update(Guid id, ElasticHospitalUpdateDTO hospitaldto)
         {
             await _service.Update(id, hospitaldto);
             return Ok("Elastic Hospital Updated Successfully");

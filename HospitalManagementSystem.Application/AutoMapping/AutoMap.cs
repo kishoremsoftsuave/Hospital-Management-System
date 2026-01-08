@@ -25,8 +25,6 @@ namespace HospitalManagementSystem.Application.AutoMapping
             CreateMap<Hospital, HospitalDetailDTO>()
                 .ForMember(d => d.HospitalName, o => o.MapFrom(s => s.Name));
 
-            // Elastic Search Mappings
-            CreateMap<ElasticHospital, ElasticHospitalDetailDTO>().ReverseMap();
 
         }
     }

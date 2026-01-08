@@ -84,7 +84,7 @@ namespace HospitalManagementSystem.Infrastructure.ElasticSearch
             return response.IsValidResponse;
         }
 
-        public async Task<bool> DeleteAllIndiciesAsync()
+        public async Task<bool> DeleteAllIndicesAsync()
         {
             try
             {
@@ -112,11 +112,13 @@ namespace HospitalManagementSystem.Infrastructure.ElasticSearch
                 return false;
             }
         }
-        public async Task<bool> DeleteHospitalAsync(int id)
+        public async Task<bool> DeleteHospitalAsync(Guid id)
         {
             try
             {
-                var response = await _client.DeleteAsync<ElasticHospital>(id.ToString(), d => d.Index(IndexName));
+                //var response = await _client.DeleteAsync<ElasticHospital>(id.ToString(), d => d.Index(IndexName));
+                // Alternatively:
+                var response = await _client.DeleteAsync(IndexName, id.ToString());
 
                 if (response.IsValidResponse)
                 {

@@ -4,17 +4,22 @@ using System.Text;
 
 namespace HospitalManagementSystem.Application.DTO.ElasticSearch
 {
+    public class ElasticHospitalCreateShowDTO
+    {
+        public Guid Id { get; set; }
+        public required string Name { get; set; } 
+        public required string Location { get; set; }
+    }
     public class ElasticHospitalCreateDTO
     {
-        public required Guid id { get; set; }
-        public required string Name { get; set; } 
+        public required string Name { get; set; }
         public required string Location { get; set; }
     }
 
     public class ElasticHospitalUpdateDTO
     {
-        public required string Name { get; set; }
-        public required string Location { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
     }
 
     public class ElasticHospitalDetailDTO
