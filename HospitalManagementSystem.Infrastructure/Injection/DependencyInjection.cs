@@ -33,43 +33,82 @@
 //    }
 //}
 
+//using HospitalManagementSystem.Infrastructure.Data;
+//using Microsoft.Azure.Cosmos;
+//using Microsoft.Extensions.Configuration;
+//using Microsoft.Extensions.DependencyInjection;
+//using Microsoft.Extensions.Options;
+
+//namespace HospitalManagementSystem.Infrastructure.Injection;
+
+//public static class DependencyInjection
+//{
+//    public static IServiceCollection AddInfrastructure(
+//        this IServiceCollection services,
+//        IConfiguration configuration)
+//    {
+//        // Bind CosmosDbOptions
+//        services.AddOptions<CosmosDbOptions>()
+//            .Bind(configuration.GetSection("CosmosDb"))
+//            .Validate(o =>
+//                !string.IsNullOrWhiteSpace(o.AccountEndpoint) &&
+//                !string.IsNullOrWhiteSpace(o.AccountKey),
+//                "CosmosDb configuration is invalid")
+//            .ValidateOnStart();
+
+//        // Register CosmosClient
+//        services.AddSingleton<CosmosClient>(sp =>
+//        {
+//            var options = sp
+//                .GetRequiredService<IOptions<CosmosDbOptions>>()
+//                .Value;
+
+//            var clientOptions = new CosmosClientOptions();
+
+//            return new CosmosClient(
+//                options.AccountEndpoint,
+//                options.AccountKey,
+//                clientOptions);
+//        });
+//        services.AddSingleton<CosmosDB>();
+
+//        return services;
+//    }
+//}
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using HospitalManagementSystem.Infrastructure.Data;
 
-namespace HospitalManagementSystem.Infrastructure.Injection;
-
-public static class DependencyInjection
+namespace HospitalManagementSystem.Infrastructure.Injection
 {
-    public static IServiceCollection AddInfrastructure(
-        this IServiceCollection services,
-        IConfiguration configuration)
+    public static class DependencyInjection
     {
-        // Bind CosmosDbOptions
-        services.AddOptions<CosmosDbOptions>()
-            .Bind(configuration.GetSection("CosmosDb"))
-            .Validate(o =>
-                !string.IsNullOrWhiteSpace(o.AccountEndpoint) &&
-                !string.IsNullOrWhiteSpace(o.AccountKey),
-                "CosmosDb configuration is invalid")
-            .ValidateOnStart();
-
-        // Register CosmosClient
-        services.AddSingleton<CosmosClient>(sp =>
+        public static IServiceCollection AddInfrastructure(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
-            var options = sp
-                .GetRequiredService<IOptions<CosmosDbOptions>>()
-                .Value;
+            // Bind CosmosDbOptions
+            services.AddOptions<CosmosDbOptions>()
+                .Bind(configuration.GetSection("CosmosDb"))
+                .Validate(o =>
+                    !string.IsNullOrWhiteSpace(o.AccountEndpoint) &&
+                    !string.IsNullOrWhiteSpace(o.AccountKey),
+                    "CosmosDb configuration is invalid")
+                .ValidateOnStart();
 
-            var clientOptions = new CosmosClientOptions();
+            // Register CosmosClient
+            services.AddSingleton<CosmosClient>(sp =>
+            {
+                var options = sp.GetRequiredService<IOptions<CosmosDbOptions>>().Value;
+                return new CosmosClient(options.AccountEndpoint, options.AccountKey, new CosmosClientOptions());
+            });
 
-            return new CosmosClient(
-                options.AccountEndpoint,
-                options.AccountKey,
-                clientOptions);
-        });
+            // Register concrete CosmosDbService
+            services.AddSingleton<CosmosDB>();
 
-        return services;
+            return services;
+        }
     }
 }
