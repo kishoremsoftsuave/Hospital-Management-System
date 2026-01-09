@@ -131,11 +131,35 @@ namespace HospitalManagementSystem.Infrastructure.Injection
             services.Configure<CosmosDbOptions>(
                 configuration.GetSection("CosmosDb"));
 
+            //services.AddSingleton(sp =>
+            //{
+            //    var opt = sp.GetRequiredService<IOptions<CosmosDbOptions>>().Value;
+            //    return new CosmosClient(opt.AccountEndpoint, opt.AccountKey);
+            //});
+
             services.AddSingleton(sp =>
             {
                 var opt = sp.GetRequiredService<IOptions<CosmosDbOptions>>().Value;
-                return new CosmosClient(opt.AccountEndpoint, opt.AccountKey);
+
+                return new CosmosClient(
+                    opt.AccountEndpoint,
+                    opt.AccountKey,
+                    new CosmosClientOptions
+                    {
+                        ConnectionMode = ConnectionMode.Gateway,
+                        HttpClientFactory = () =>
+                        {
+                            var handler = new HttpClientHandler
+                            {
+                                ServerCertificateCustomValidationCallback =
+                                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                            };
+                            return new HttpClient(handler);
+                        }
+                    });
             });
+
+
 
             services.AddSingleton(sp =>
             {

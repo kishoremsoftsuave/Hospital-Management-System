@@ -151,6 +151,16 @@ builder.Services.AddScoped<IElasticHospitalRepository, ElasticHospitalRepository
 // Build app
 var app = builder.Build();
 
+// Configure middleware
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+//app.UseSwagger();
+//app.UseSwaggerUI();
+
 // Global Exception Middleware
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
@@ -164,7 +174,7 @@ using (var scope = app.Services.CreateScope())
     Console.WriteLine("Container = " + opt.ContainerId);
 }
 
-// Create Elasticsearch Indices on startup
+//// Create Elasticsearch Indices on startup
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ElasticDB>();
@@ -178,7 +188,7 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine("Failed to create Elasticsearch indices on startup.");
     }
 }
-// Initialize Cosmos DB on startup
+//// Initialize Cosmos DB on startup
 using (var scope = app.Services.CreateScope())
 {
     var client = scope.ServiceProvider.GetRequiredService<CosmosClient>();
@@ -191,12 +201,6 @@ using (var scope = app.Services.CreateScope())
         opt.PartitionKeyPath);
 }
 
-// Configure middleware
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 // HTTPS Redirection
 app.UseHttpsRedirection();
