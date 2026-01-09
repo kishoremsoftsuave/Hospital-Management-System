@@ -3,22 +3,23 @@ using Elastic.Transport;
 using HospitalManagementSystem.API.Exceptions;
 using HospitalManagementSystem.Application.AutoMapping;
 using HospitalManagementSystem.Application.Configuratioon;
-using HospitalManagementSystem.Infrastructure.Injection;
 using HospitalManagementSystem.Application.Interfaces.ElasticSearch;
+using HospitalManagementSystem.Application.Interfaces.WebAPI;
 using HospitalManagementSystem.Application.Services;
 using HospitalManagementSystem.Application.Services.ElasticSearch;
+using HospitalManagementSystem.Application.Services.WebAPI;
 using HospitalManagementSystem.Infrastructure.Data;
 using HospitalManagementSystem.Infrastructure.ElasticSearch;
+using HospitalManagementSystem.Infrastructure.Injection;
 using HospitalManagementSystem.Infrastructure.Repository.ElasticSearch;
+using HospitalManagementSystem.Infrastructure.Repository.WebAPI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using HospitalManagementSystem.Infrastructure.Repository.WebAPI;
-using HospitalManagementSystem.Application.Services.WebAPI;
-using HospitalManagementSystem.Application.Interfaces.WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -125,6 +126,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMap).Assembly);
+builder.Services.AddAutoMapper(typeof(CosmosAutoMap).Assembly);
+builder.Services.AddAutoMapper(typeof(ElasticAutoMap).Assembly);
 
 // Services
 builder.Services.AddScoped<TokenService>();
@@ -151,6 +154,16 @@ var app = builder.Build();
 // Global Exception Middleware
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
+// Temporary 
+using (var scope = app.Services.CreateScope())
+{
+    var opt = scope.ServiceProvider
+                   .GetRequiredService<IOptions<CosmosDbOptions>>().Value;
+
+    Console.WriteLine("DB = " + opt.DatabaseId);
+    Console.WriteLine("Container = " + opt.ContainerId);
+}
+
 // Create Elasticsearch Indices on startup
 using (var scope = app.Services.CreateScope())
 {
@@ -164,6 +177,18 @@ using (var scope = app.Services.CreateScope())
     {
         Console.WriteLine("Failed to create Elasticsearch indices on startup.");
     }
+}
+// Initialize Cosmos DB on startup
+using (var scope = app.Services.CreateScope())
+{
+    var client = scope.ServiceProvider.GetRequiredService<CosmosClient>();
+    var opt = scope.ServiceProvider.GetRequiredService<IOptions<CosmosDbOptions>>().Value;
+
+    await CosmosInitializer.InitializeAsync(
+        client,
+        opt.DatabaseId,
+        opt.ContainerId,
+        opt.PartitionKeyPath);
 }
 
 // Configure middleware

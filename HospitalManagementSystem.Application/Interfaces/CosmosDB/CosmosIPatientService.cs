@@ -9,8 +9,9 @@ namespace HospitalManagementSystem.Application.Interfaces.CosmosDB
 {
     public interface CosmosIPatientService
     {
-        Task<CosmosPatientDTO> Create(CosmosCreatePatientDTO dto);
+        Task<List<CosmosPatientDTO>> GetAll();
         Task<CosmosPatientDTO?> GetById(string id);
+        Task<CosmosPatientDTO> Create(CosmosCreatePatientDTO dto);
         Task<CosmosPatientDTO> UpdateById(CosmosUpdatePatientDTO dto);
         Task Delete(string id);
     }

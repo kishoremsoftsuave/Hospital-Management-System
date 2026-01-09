@@ -75,8 +75,11 @@
 //        return services;
 //    }
 //}
+using HospitalManagementSystem.Application.Interfaces.CosmosDB;
 using HospitalManagementSystem.Application.Services;
+using HospitalManagementSystem.Application.Services.CosmosDB;
 using HospitalManagementSystem.Infrastructure.Data;
+using HospitalManagementSystem.Infrastructure.Repository.CosmosDB;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -86,37 +89,64 @@ namespace HospitalManagementSystem.Infrastructure.Injection
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(
-            this IServiceCollection services,
-            IConfiguration configuration)
+        //public static IServiceCollection AddInfrastructure(
+        //    this IServiceCollection services,
+        //    IConfiguration configuration)
+        //{
+        //    // Bind CosmosDbOptions
+        //    services.AddOptions<CosmosDbOptions>()
+        //        .Bind(configuration.GetSection("CosmosDb"))
+        //        .Validate(o =>
+        //            !string.IsNullOrWhiteSpace(o.AccountEndpoint) &&
+        //            !string.IsNullOrWhiteSpace(o.AccountKey),
+        //            "CosmosDb configuration is invalid")
+        //        .ValidateOnStart();
+
+        //    // Register CosmosClient
+        //    services.AddSingleton<CosmosClient>(sp =>
+        //    {
+        //        var options = sp.GetRequiredService<IOptions<CosmosDbOptions>>().Value;
+        //        return new CosmosClient(options.AccountEndpoint, options.AccountKey, new CosmosClientOptions());
+        //    });
+
+        //    // Register concrete CosmosDbService
+
+        //    services.AddSingleton<CosmosDB>();
+        //    services.AddSingleton(sp =>
+        //    {
+        //        var cosmosDb = sp.GetRequiredService<CosmosDB>();
+        //        var options = configuration.GetSection("CosmosDb");
+        //        var databaseId = options["DatabaseId"];
+        //        var containerId = options["ContainerId"];
+        //        var partitionKey = options["PartitionKeyPath"] ?? "/id";
+        //        return new CosmosPatientService(cosmosDb, databaseId, containerId, partitionKey);
+        //    });
+
+        //    services.AddSingleton<CosmosIPatientRepository, CosmosPatientRepository>();
+        //    services.AddSingleton<CosmosIPatientService, CosmosPatientService>();
+        //    return services;
+        //}
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services,IConfiguration configuration)
         {
-            // Bind CosmosDbOptions
-            services.AddOptions<CosmosDbOptions>()
-                .Bind(configuration.GetSection("CosmosDb"))
-                .Validate(o =>
-                    !string.IsNullOrWhiteSpace(o.AccountEndpoint) &&
-                    !string.IsNullOrWhiteSpace(o.AccountKey),
-                    "CosmosDb configuration is invalid")
-                .ValidateOnStart();
+            services.Configure<CosmosDbOptions>(
+                configuration.GetSection("CosmosDb"));
 
-            // Register CosmosClient
-            services.AddSingleton<CosmosClient>(sp =>
-            {
-                var options = sp.GetRequiredService<IOptions<CosmosDbOptions>>().Value;
-                return new CosmosClient(options.AccountEndpoint, options.AccountKey, new CosmosClientOptions());
-            });
-
-            // Register concrete CosmosDbService
-            services.AddSingleton<CosmosDB>();
             services.AddSingleton(sp =>
             {
-                var cosmosDb = sp.GetRequiredService<CosmosDB>();
-                var options = configuration.GetSection("CosmosDb");
-                var databaseId = options["DatabaseId"];
-                var containerId = options["ContainerId"];
-                var partitionKey = options["PartitionKeyPath"] ?? "/id";
-                return new PatientService(cosmosDb, databaseId, containerId, partitionKey);
+                var opt = sp.GetRequiredService<IOptions<CosmosDbOptions>>().Value;
+                return new CosmosClient(opt.AccountEndpoint, opt.AccountKey);
             });
+
+            services.AddSingleton(sp =>
+            {
+                var opt = sp.GetRequiredService<IOptions<CosmosDbOptions>>().Value;
+                var client = sp.GetRequiredService<CosmosClient>();
+
+                return client.GetContainer(opt.DatabaseId, opt.ContainerId);
+            });
+
+            services.AddSingleton<CosmosIPatientRepository, CosmosPatientRepository>();
+            services.AddSingleton<CosmosIPatientService, CosmosPatientService>();
 
             return services;
         }

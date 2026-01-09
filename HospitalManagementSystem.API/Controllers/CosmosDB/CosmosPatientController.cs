@@ -15,6 +15,13 @@ namespace HospitalManagementSystem.API.Controllers.CosmosDB
             _service = service;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var patients = await _service.GetAll();
+            return Ok(patients);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {
