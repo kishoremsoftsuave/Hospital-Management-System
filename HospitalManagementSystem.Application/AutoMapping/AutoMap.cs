@@ -1,8 +1,8 @@
-﻿using HospitalManagementSystem.Application.DTO;
-using HospitalManagementSystem.Domain.Entities;
-using AutoMapper;
+﻿using AutoMapper;
 using HospitalManagementSystem.Domain.Entities.ElasticSearch;
 using HospitalManagementSystem.Application.DTO.ElasticSearch;
+using HospitalManagementSystem.Application.DTO.WebAPI;
+using HospitalManagementSystem.Domain.Entities.WebAPI;
 
 namespace HospitalManagementSystem.Application.AutoMapping
 {

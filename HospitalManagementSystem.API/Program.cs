@@ -3,14 +3,12 @@ using Elastic.Transport;
 using HospitalManagementSystem.API.Exceptions;
 using HospitalManagementSystem.Application.AutoMapping;
 using HospitalManagementSystem.Application.Configuratioon;
-using HospitalManagementSystem.Application.Interfaces;
 using HospitalManagementSystem.Infrastructure.Injection;
 using HospitalManagementSystem.Application.Interfaces.ElasticSearch;
 using HospitalManagementSystem.Application.Services;
 using HospitalManagementSystem.Application.Services.ElasticSearch;
 using HospitalManagementSystem.Infrastructure.Data;
 using HospitalManagementSystem.Infrastructure.ElasticSearch;
-using HospitalManagementSystem.Infrastructure.Repository;
 using HospitalManagementSystem.Infrastructure.Repository.ElasticSearch;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +16,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using HospitalManagementSystem.Infrastructure.Repository.WebAPI;
+using HospitalManagementSystem.Application.Services.WebAPI;
+using HospitalManagementSystem.Application.Interfaces.WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 

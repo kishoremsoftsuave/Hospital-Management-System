@@ -1,4 +1,4 @@
-﻿using HospitalManagementSystem.Domain.Entities;
+﻿using HospitalManagementSystem.Domain.Entities.WebAPI;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

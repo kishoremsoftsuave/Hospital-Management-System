@@ -75,11 +75,12 @@
 //        return services;
 //    }
 //}
+using HospitalManagementSystem.Application.Services;
+using HospitalManagementSystem.Infrastructure.Data;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using HospitalManagementSystem.Infrastructure.Data;
 
 namespace HospitalManagementSystem.Infrastructure.Injection
 {
@@ -107,6 +108,15 @@ namespace HospitalManagementSystem.Infrastructure.Injection
 
             // Register concrete CosmosDbService
             services.AddSingleton<CosmosDB>();
+            services.AddSingleton(sp =>
+            {
+                var cosmosDb = sp.GetRequiredService<CosmosDB>();
+                var options = configuration.GetSection("CosmosDb");
+                var databaseId = options["DatabaseId"];
+                var containerId = options["ContainerId"];
+                var partitionKey = options["PartitionKeyPath"] ?? "/id";
+                return new PatientService(cosmosDb, databaseId, containerId, partitionKey);
+            });
 
             return services;
         }
