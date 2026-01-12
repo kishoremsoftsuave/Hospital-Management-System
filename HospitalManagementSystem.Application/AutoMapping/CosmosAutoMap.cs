@@ -14,8 +14,6 @@ namespace HospitalManagementSystem.Application.AutoMapping
             CreateMap<CosmosCreatePatientDTO, CosmosPatient>();
             CreateMap<CosmosUpdatePatientDTO, CosmosPatient>();
             CreateMap<CosmosPatient, CosmosPatientDTO>();
-            CreateMap<CosmosCreatePatientDTO, CosmosPatient>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid().ToString()));
         }
     }
 }
