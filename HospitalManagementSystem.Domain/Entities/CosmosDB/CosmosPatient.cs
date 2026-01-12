@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -7,7 +8,7 @@ namespace HospitalManagementSystem.Domain.Entities.CosmosDB
 {
     public class CosmosPatient
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         //public string Id { get; set; } = Guid.NewGuid().ToString("N");// remove hyphens for Cosmos DB id
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; } = string.Empty;
