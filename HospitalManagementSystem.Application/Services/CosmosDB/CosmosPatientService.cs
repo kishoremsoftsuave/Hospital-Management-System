@@ -35,7 +35,6 @@ namespace HospitalManagementSystem.Application.Services.CosmosDB
         public async Task<CosmosPatientDTO> Create(CosmosCreatePatientDTO dto)
         {
             var patient = _mapper.Map<CosmosPatient>(dto);
-
             var created = await _repo.Create(patient);
 
             return _mapper.Map<CosmosPatientDTO>(created);
