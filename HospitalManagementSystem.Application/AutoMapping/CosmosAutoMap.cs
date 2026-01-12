@@ -11,9 +11,9 @@ namespace HospitalManagementSystem.Application.AutoMapping
     {
         public CosmosAutoMap()
         {
-            CreateMap<CosmosCreatePatientDTO, CosmosPatient>();
-            CreateMap<CosmosUpdatePatientDTO, CosmosPatient>();
-            CreateMap<CosmosPatient, CosmosPatientDTO>();
+            CreateMap<CosmosCreatePatientDTO, CosmosPatient>().ReverseMap();
+            CreateMap<CosmosUpdatePatientDTO, CosmosPatient>().ReverseMap();
+            CreateMap<CosmosPatient, CosmosPatientDTO>().ReverseMap();
         }
     }
 }
